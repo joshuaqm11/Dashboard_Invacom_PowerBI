@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Dashboard_Invacom"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "85cb9875-c331-44b8-87a8-1a67a6257249"
+  }
+}

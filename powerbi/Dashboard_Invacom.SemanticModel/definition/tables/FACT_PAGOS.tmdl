@@ -1,0 +1,95 @@
+table FACT_PAGOS
+	lineageTag: 793314f6-db1c-43f3-9c98-cd12e8689d46
+
+	column ORDER_ID
+		dataType: string
+		lineageTag: fa0c0055-89cd-42f0-bb80-66585cf411b2
+		summarizeBy: none
+		sourceColumn: ORDER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PAYMENT_SEQUENTIAL
+		dataType: double
+		lineageTag: 497aff82-c898-41ba-b919-f827d015372e
+		summarizeBy: sum
+		sourceColumn: PAYMENT_SEQUENTIAL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_FECHA_COMPRA
+		dataType: double
+		lineageTag: 085ca2fb-386c-4dda-a2f4-fae21c11ca2f
+		summarizeBy: none
+		sourceColumn: SK_FECHA_COMPRA
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_CLIENTE
+		dataType: double
+		lineageTag: c58c9d3e-115f-40a2-ba70-838a352c1da0
+		summarizeBy: none
+		sourceColumn: SK_CLIENTE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_TIPO_PAGO
+		dataType: double
+		lineageTag: d9a8cb27-cbdf-42bd-b8c9-82ff805ba71b
+		summarizeBy: none
+		sourceColumn: SK_TIPO_PAGO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_ESTADO_ORDEN
+		dataType: double
+		lineageTag: 67f30ac0-562b-4dcf-b569-fcdc7c4d2a63
+		summarizeBy: none
+		sourceColumn: SK_ESTADO_ORDEN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CUOTAS
+		dataType: double
+		lineageTag: 3bd327ba-881f-468a-b06c-83df497e567a
+		summarizeBy: sum
+		sourceColumn: CUOTAS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MONTO_PAGO
+		dataType: double
+		lineageTag: 9e9f1e29-f66e-46da-859d-6d0c52b03fd7
+		summarizeBy: sum
+		sourceColumn: MONTO_PAGO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FACT_PAGOS = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    FACT_PAGOS1 = DW_INVACOM{[Name="FACT_PAGOS"]}[Data]
+				in
+				    FACT_PAGOS1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

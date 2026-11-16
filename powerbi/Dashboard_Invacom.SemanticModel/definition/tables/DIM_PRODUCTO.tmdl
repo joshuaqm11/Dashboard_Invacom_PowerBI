@@ -1,0 +1,119 @@
+table DIM_PRODUCTO
+	lineageTag: 7ba0d78b-d0db-4aba-ace5-bb663b03b5b4
+
+	column SK_PRODUCTO
+		dataType: double
+		lineageTag: 4e976ba3-002f-483b-b213-74527f16d0f1
+		summarizeBy: none
+		sourceColumn: SK_PRODUCTO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PRODUCT_ID
+		dataType: string
+		lineageTag: fc134e4f-06e2-4901-be78-100f3d00d96a
+		summarizeBy: none
+		sourceColumn: PRODUCT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CATEGORIA_PT
+		dataType: string
+		lineageTag: 29b38b9f-b5a3-4273-a678-94871ffa6ff1
+		summarizeBy: none
+		sourceColumn: CATEGORIA_PT
+
+		annotation SummarizationSetBy = Automatic
+
+	column CATEGORIA_EN
+		dataType: string
+		lineageTag: 303d5333-132a-4a49-af4d-04dfb643a692
+		summarizeBy: none
+		sourceColumn: CATEGORIA_EN
+
+		annotation SummarizationSetBy = Automatic
+
+	column PESO_G
+		dataType: double
+		lineageTag: 4485e523-e0cf-44e4-a61c-0cec91d28515
+		summarizeBy: none
+		sourceColumn: PESO_G
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LARGO_CM
+		dataType: double
+		lineageTag: cdb676fd-57bb-4fd4-98ba-58fd4f9590f1
+		summarizeBy: none
+		sourceColumn: LARGO_CM
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ALTO_CM
+		dataType: double
+		lineageTag: 5aa59665-f028-4efd-ab0f-8e0b27653ae9
+		summarizeBy: none
+		sourceColumn: ALTO_CM
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ANCHO_CM
+		dataType: double
+		lineageTag: 36522e0b-5827-455b-a929-48cc4484b1db
+		summarizeBy: none
+		sourceColumn: ANCHO_CM
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column VOLUMEN_CM3
+		dataType: double
+		lineageTag: 7a8881ee-2bcb-47e4-9448-101f10bc8624
+		summarizeBy: none
+		sourceColumn: VOLUMEN_CM3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RANGO_PESO
+		dataType: string
+		lineageTag: 961b4b63-d3fc-45a6-b3ea-099f43938962
+		summarizeBy: none
+		sourceColumn: RANGO_PESO
+
+		annotation SummarizationSetBy = Automatic
+
+	column CANTIDAD_FOTOS
+		dataType: double
+		lineageTag: 33539f33-df04-45eb-897d-bbf492a287d9
+		summarizeBy: none
+		sourceColumn: CANTIDAD_FOTOS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DIM_PRODUCTO = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_PRODUCTO1 = DW_INVACOM{[Name="DIM_PRODUCTO"]}[Data]
+				in
+				    DIM_PRODUCTO1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,51 @@
+table DIM_ESTADO_ORDEN
+	lineageTag: 0afaecae-b657-4e6b-b32a-579b09db50ce
+
+	column SK_ESTADO_ORDEN
+		dataType: double
+		lineageTag: e3257183-c941-4c75-a5b8-df4c56ba40af
+		summarizeBy: none
+		sourceColumn: SK_ESTADO_ORDEN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ESTADO_ORDEN
+		dataType: string
+		lineageTag: ad63fe17-aca0-4fc9-a295-0d93efd07285
+		summarizeBy: none
+		sourceColumn: ESTADO_ORDEN
+
+		annotation SummarizationSetBy = Automatic
+
+	column ESTADO_ORDEN_ES
+		dataType: string
+		lineageTag: 49b99fb6-556b-4e3c-a16a-5a9a8110ccc3
+		summarizeBy: none
+		sourceColumn: ESTADO_ORDEN_ES
+
+		annotation SummarizationSetBy = Automatic
+
+	column ES_COMPLETADA
+		dataType: string
+		lineageTag: bbc5a090-fa22-4fb2-ba00-20155e4cf126
+		summarizeBy: none
+		sourceColumn: ES_COMPLETADA
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_ESTADO_ORDEN = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_ESTADO_ORDEN1 = DW_INVACOM{[Name="DIM_ESTADO_ORDEN"]}[Data]
+				in
+				    DIM_ESTADO_ORDEN1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

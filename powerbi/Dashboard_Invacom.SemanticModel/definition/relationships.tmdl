@@ -1,0 +1,66 @@
+relationship 58db9354-3b1f-42a6-bd0e-473306e40906
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DIM_TIEMPO.FECHA
+	toColumn: LocalDateTable_3156606b-7bbe-4815-aebd-a58b8c30de67.Date
+
+relationship 98a7bfaf-2251-49c1-ac52-6006feb0d982
+	fromColumn: FACT_PAGOS.SK_CLIENTE
+	toColumn: DIM_CLIENTE.SK_CLIENTE
+
+	annotation PBI_IsFromSource = FS
+
+relationship b4d8b7b9-6402-4f05-b384-3832732d4d73
+	fromColumn: FACT_PAGOS.SK_ESTADO_ORDEN
+	toColumn: DIM_ESTADO_ORDEN.SK_ESTADO_ORDEN
+
+	annotation PBI_IsFromSource = FS
+
+relationship 90562598-dfa5-470c-98d9-25e4945ab48e
+	fromColumn: FACT_PAGOS.SK_FECHA_COMPRA
+	toColumn: DIM_TIEMPO.SK_TIEMPO
+
+	annotation PBI_IsFromSource = FS
+
+relationship 876fdcee-4d5b-49d3-8530-cbb3f8a99a63
+	fromColumn: FACT_PAGOS.SK_TIPO_PAGO
+	toColumn: DIM_TIPO_PAGO.SK_TIPO_PAGO
+
+	annotation PBI_IsFromSource = FS
+
+relationship 67c3e121-a545-4ec8-8f72-4297395aa61e
+	fromColumn: FACT_VENTAS.SK_CLIENTE
+	toColumn: DIM_CLIENTE.SK_CLIENTE
+
+	annotation PBI_IsFromSource = FS
+
+relationship 24fde422-7b54-449c-93a6-3a0f5d87bb52
+	fromColumn: FACT_VENTAS.SK_ESTADO_ORDEN
+	toColumn: DIM_ESTADO_ORDEN.SK_ESTADO_ORDEN
+
+	annotation PBI_IsFromSource = FS
+
+relationship cc54916e-cd89-472e-9de3-0d162ddada01
+	fromColumn: FACT_VENTAS.SK_PRODUCTO
+	toColumn: DIM_PRODUCTO.SK_PRODUCTO
+
+	annotation PBI_IsFromSource = FS
+
+relationship cfd5fc9c-3061-4dbc-a88b-af1e876674e5
+	fromColumn: FACT_VENTAS.SK_FECHA_COMPRA
+	toColumn: DIM_TIEMPO.SK_TIEMPO
+
+	annotation PBI_IsFromSource = FS
+
+relationship a272c190-3bd7-42e0-a2cc-8434b7cec3d8
+	isActive: false
+	fromColumn: FACT_VENTAS.SK_FECHA_ENTREGA
+	toColumn: DIM_TIEMPO.SK_TIEMPO
+
+	annotation PBI_IsFromSource = FS
+
+relationship e09610e8-0f0a-40e3-9d47-67528324948d
+	fromColumn: FACT_VENTAS.SK_VENDEDOR
+	toColumn: DIM_VENDEDOR.SK_VENDEDOR
+
+	annotation PBI_IsFromSource = FS
+
