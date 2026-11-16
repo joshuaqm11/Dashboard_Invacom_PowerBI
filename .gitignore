@@ -1,0 +1,26 @@
+# Power BI Project (PBIP): caché de datos y configuración local, no se versionan
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+*.abf
+
+# Copias .pbix (el proyecto oficial es el .pbip). Si se exporta un .pbix para la entrega, se sube aparte.
+*.pbix
+!entrega/*.pbix
+
+# Credenciales
+.env
+*.env
+
+# Datos
+*.csv
+*.parquet
+
+# Office temporal
+~$*
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
