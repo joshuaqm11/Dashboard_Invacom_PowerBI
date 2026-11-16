@@ -1,0 +1,22 @@
+table 'Medidas Clientes'
+	lineageTag: f02e18d0-7919-470c-b621-2898000fe720
+
+	column Columna1
+		dataType: string
+		lineageTag: 9cf0a3f8-6ac5-4838-81a8-f713aae2551a
+		summarizeBy: none
+		sourceColumn: Columna1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Medidas Clientes' = m
+		mode: import
+		source =
+				let
+				    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Columna1 = _t]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,193 @@
+table FACT_VENTAS
+	lineageTag: 66c0487c-6927-48b1-b0c2-0da421b4262a
+
+	column ORDER_ID
+		dataType: string
+		lineageTag: 60168de8-9388-43c9-93ae-d9e5ba460bd4
+		summarizeBy: none
+		sourceColumn: ORDER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDER_ITEM_ID
+		dataType: double
+		lineageTag: cb9ba0a8-09a6-49cf-aba6-1610fa49f75f
+		summarizeBy: count
+		sourceColumn: ORDER_ITEM_ID
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_FECHA_COMPRA
+		dataType: double
+		isHidden
+		lineageTag: 59ac81e4-caef-4e1d-9b75-c4cba671b0f4
+		summarizeBy: none
+		sourceColumn: SK_FECHA_COMPRA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_FECHA_ENTREGA
+		dataType: double
+		isHidden
+		lineageTag: a0b12c85-1146-47e0-913a-9875d62a03a4
+		summarizeBy: sum
+		sourceColumn: SK_FECHA_ENTREGA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_CLIENTE
+		dataType: double
+		isHidden
+		lineageTag: d43f9509-52e3-4b7a-ab5f-4eb1a220c5a9
+		summarizeBy: none
+		sourceColumn: SK_CLIENTE
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_PRODUCTO
+		dataType: double
+		isHidden
+		lineageTag: 955480e5-2f16-446a-8698-f914194cb2a4
+		summarizeBy: none
+		sourceColumn: SK_PRODUCTO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_VENDEDOR
+		dataType: double
+		isHidden
+		lineageTag: 55802ab2-17da-40be-800b-2ba9ab81b5a4
+		summarizeBy: none
+		sourceColumn: SK_VENDEDOR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SK_ESTADO_ORDEN
+		dataType: double
+		isHidden
+		lineageTag: 4b736def-6d88-40c4-be1a-254d6ae70161
+		summarizeBy: none
+		sourceColumn: SK_ESTADO_ORDEN
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CANTIDAD
+		dataType: double
+		lineageTag: a3c6260d-52ec-4ce7-aa3b-135fe00918b5
+		summarizeBy: sum
+		sourceColumn: CANTIDAD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PRECIO
+		dataType: double
+		lineageTag: 056e7141-8947-4b3a-a2c6-75b497d208c9
+		summarizeBy: sum
+		sourceColumn: PRECIO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FLETE
+		dataType: double
+		lineageTag: 4c2cb433-d27b-40f7-980b-fdbd241842da
+		summarizeBy: sum
+		sourceColumn: FLETE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MONTO_TOTAL
+		dataType: double
+		lineageTag: d38ce916-e87c-4345-839c-9475b84ec3d8
+		summarizeBy: sum
+		sourceColumn: MONTO_TOTAL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DIAS_ENTREGA
+		dataType: double
+		lineageTag: 17e30595-a32e-4909-b005-f93d28f9e1c2
+		summarizeBy: sum
+		sourceColumn: DIAS_ENTREGA
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DIAS_ATRASO
+		dataType: double
+		lineageTag: 4fd2728f-d25a-434a-bdaf-22c22cc9dc8f
+		summarizeBy: sum
+		sourceColumn: DIAS_ATRASO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ENTREGADO_A_TIEMPO
+		dataType: double
+		lineageTag: 5cc4a04b-89b2-43ef-8ad1-a12014950980
+		summarizeBy: sum
+		sourceColumn: ENTREGADO_A_TIEMPO
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column REVIEW_SCORE
+		dataType: double
+		lineageTag: 4cea9bcd-6299-4ffd-8775-4e2255bd79db
+		summarizeBy: sum
+		sourceColumn: REVIEW_SCORE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FACT_VENTAS = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    FACT_VENTAS1 = DW_INVACOM{[Name="FACT_VENTAS"]}[Data]
+				in
+				    FACT_VENTAS1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

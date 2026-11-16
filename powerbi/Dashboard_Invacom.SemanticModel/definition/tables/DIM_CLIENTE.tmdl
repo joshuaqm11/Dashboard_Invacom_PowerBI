@@ -1,0 +1,92 @@
+table DIM_CLIENTE
+	lineageTag: bce5eb61-1c17-4625-a637-4f5af2340a75
+
+	column SK_CLIENTE
+		dataType: double
+		isHidden
+		lineageTag: b8337297-d423-4581-aec4-a5468c37fe20
+		summarizeBy: none
+		sourceColumn: SK_CLIENTE
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CUSTOMER_UNIQUE_ID
+		dataType: string
+		lineageTag: 4fce92cb-bf51-454c-9c5c-c254075be5dd
+		summarizeBy: none
+		sourceColumn: CUSTOMER_UNIQUE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CODIGO_POSTAL
+		dataType: string
+		lineageTag: 95fb2e7d-6e1f-49a7-b8c2-3a7aa67f83f8
+		summarizeBy: none
+		sourceColumn: CODIGO_POSTAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column CIUDAD
+		dataType: string
+		lineageTag: 54284353-9cd2-4a29-a7df-0c3606973f47
+		summarizeBy: none
+		sourceColumn: CIUDAD
+
+		annotation SummarizationSetBy = Automatic
+
+	column ESTADO
+		dataType: string
+		lineageTag: fee9210e-a661-4f42-a13a-a91dda78efab
+		summarizeBy: none
+		sourceColumn: ESTADO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGION
+		dataType: string
+		lineageTag: c069a3f4-44af-4879-a530-f1d8684b25b8
+		summarizeBy: none
+		sourceColumn: REGION
+
+		annotation SummarizationSetBy = Automatic
+
+	column LATITUD
+		dataType: double
+		lineageTag: 1d8d76d1-063e-42af-8eca-305ff3da4d99
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: LATITUD
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LONGITUD
+		dataType: double
+		lineageTag: 93277277-222c-4ca1-b88f-65695cee70e6
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: LONGITUD
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DIM_CLIENTE = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_CLIENTE1 = DW_INVACOM{[Name="DIM_CLIENTE"]}[Data]
+				in
+				    DIM_CLIENTE1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

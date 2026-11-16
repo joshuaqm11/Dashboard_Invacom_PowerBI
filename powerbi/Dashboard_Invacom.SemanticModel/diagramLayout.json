@@ -1,0 +1,126 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 729.82733102202667,
+            "y": -50
+          },
+          "nodeIndex": "DIM_CLIENTE",
+          "nodeLineageTag": "bce5eb61-1c17-4625-a637-4f5af2340a75",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 825.35472900706043,
+            "y": 626.87664294432
+          },
+          "nodeIndex": "DIM_ESTADO_ORDEN",
+          "nodeLineageTag": "0afaecae-b657-4e6b-b32a-579b09db50ce",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 84.824384429103247,
+            "y": 348.46873459809581
+          },
+          "nodeIndex": "DIM_PRODUCTO",
+          "nodeLineageTag": "7ba0d78b-d0db-4aba-ace5-bb663b03b5b4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 658.0024506259208,
+            "y": 275.51324005378058
+          },
+          "nodeIndex": "DIM_TIEMPO",
+          "nodeLineageTag": "6ac193eb-4ab4-4899-b500-f197f7b3e102",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1014.2617910031108,
+            "y": 81.6367054451456
+          },
+          "nodeIndex": "DIM_TIPO_PAGO",
+          "nodeLineageTag": "f195a97d-f270-467b-a206-cb83fe40b975",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 22.821673016931641
+          },
+          "nodeIndex": "DIM_VENDEDOR",
+          "nodeLineageTag": "99d980bb-e8b4-4026-9563-cdabfec21ef0",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1300.6691813977945,
+            "y": 244.55937225761113
+          },
+          "nodeIndex": "FACT_PAGOS",
+          "nodeLineageTag": "793314f6-db1c-43f3-9c98-cd12e8689d46",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 371.87161556595987,
+            "y": 139.8317968797827
+          },
+          "nodeIndex": "FACT_VENTAS",
+          "nodeLineageTag": "66c0487c-6927-48b1-b0c2-0da421b4262a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 39.0625,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

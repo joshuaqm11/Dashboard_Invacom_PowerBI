@@ -1,0 +1,46 @@
+table DIM_TIPO_PAGO
+	lineageTag: f195a97d-f270-467b-a206-cb83fe40b975
+
+	column SK_TIPO_PAGO
+		dataType: double
+		isHidden
+		lineageTag: 0098e6e0-ecea-4f75-9f72-ba8b2f6cd434
+		summarizeBy: none
+		sourceColumn: SK_TIPO_PAGO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TIPO_PAGO
+		dataType: string
+		lineageTag: 894d4d5a-1718-40fd-a88b-72e7507ab70c
+		summarizeBy: none
+		sourceColumn: TIPO_PAGO
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIPO_PAGO_ES
+		dataType: string
+		lineageTag: c87828a4-6612-4ec3-ac32-053a8f960936
+		summarizeBy: none
+		sourceColumn: TIPO_PAGO_ES
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_TIPO_PAGO = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_TIPO_PAGO1 = DW_INVACOM{[Name="DIM_TIPO_PAGO"]}[Data]
+				in
+				    DIM_TIPO_PAGO1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

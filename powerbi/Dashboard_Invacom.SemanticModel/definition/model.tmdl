@@ -1,0 +1,30 @@
+model Model
+	culture: es-CR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["FACT_PAGOS","FACT_VENTAS","DIM_CLIENTE","DIM_TIEMPO","DIM_VENDEDOR","DIM_ESTADO_ORDEN","DIM_PRODUCTO","DIM_TIPO_PAGO","pServidorOracle","Medidas Ventas","Medidas Finanzas","Medidas Logística","Medidas Clientes"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table FACT_PAGOS
+ref table FACT_VENTAS
+ref table DIM_CLIENTE
+ref table DIM_TIEMPO
+ref table DIM_VENDEDOR
+ref table DIM_ESTADO_ORDEN
+ref table DIM_PRODUCTO
+ref table DIM_TIPO_PAGO
+ref table 'Medidas Ventas'
+ref table 'Medidas Finanzas'
+ref table 'Medidas Logística'
+ref table 'Medidas Clientes'
+
+ref cultureInfo es-CR
+

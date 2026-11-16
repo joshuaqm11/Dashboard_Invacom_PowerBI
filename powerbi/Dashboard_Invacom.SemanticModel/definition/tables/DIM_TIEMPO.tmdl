@@ -1,0 +1,134 @@
+table DIM_TIEMPO
+	lineageTag: 6ac193eb-4ab4-4899-b500-f197f7b3e102
+	dataCategory: Time
+
+	column SK_TIEMPO
+		dataType: double
+		isHidden
+		lineageTag: 78036ef9-fd89-470d-a53d-361926339727
+		summarizeBy: none
+		sourceColumn: SK_TIEMPO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FECHA
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: bc90ac3e-75bf-434a-b26a-71dad6d61395
+		summarizeBy: none
+		sourceColumn: FECHA
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ANIO
+		dataType: double
+		lineageTag: 62e0b072-bfe6-406f-8c11-06490eaa23eb
+		summarizeBy: none
+		sourceColumn: ANIO
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TRIMESTRE
+		dataType: double
+		lineageTag: 2c85c16e-818a-49e5-8ac4-73077939ba50
+		summarizeBy: none
+		sourceColumn: TRIMESTRE
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MES
+		dataType: double
+		lineageTag: 9c76f556-627e-4a88-b23d-d75f830728ad
+		summarizeBy: none
+		sourceColumn: MES
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NOMBRE_MES
+		dataType: string
+		lineageTag: 188694d8-15d5-43bc-b096-ab58506af2aa
+		summarizeBy: none
+		sourceColumn: NOMBRE_MES
+		sortByColumn: MES
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column ANIO_MES
+		dataType: string
+		lineageTag: bff73e67-bdd6-493b-9432-c7bd1781cede
+		summarizeBy: none
+		sourceColumn: ANIO_MES
+
+		annotation SummarizationSetBy = Automatic
+
+	column DIA
+		dataType: double
+		lineageTag: b02491de-0f9e-4fbc-86e2-ec2bf417d913
+		summarizeBy: none
+		sourceColumn: DIA
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DIA_SEMANA
+		dataType: double
+		lineageTag: bc4e787f-96db-42f4-9f4f-d9efa9ec86c3
+		summarizeBy: none
+		sourceColumn: DIA_SEMANA
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NOMBRE_DIA
+		dataType: string
+		lineageTag: 3a1c5824-6950-43c9-adf1-e164dc628ed7
+		summarizeBy: none
+		sourceColumn: NOMBRE_DIA
+		sortByColumn: DIA_SEMANA
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column ES_FIN_SEMANA
+		dataType: string
+		lineageTag: 1f66ce0c-5f75-460e-82a9-5c0c089f4a33
+		summarizeBy: none
+		sourceColumn: ES_FIN_SEMANA
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_TIEMPO = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_TIEMPO1 = DW_INVACOM{[Name="DIM_TIEMPO"]}[Data],
+				    #"Quitar Miembro Desconocido" = Table.SelectRows(DIM_TIEMPO1, each ([SK_TIEMPO] <> -1))
+				in
+				    #"Quitar Miembro Desconocido"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

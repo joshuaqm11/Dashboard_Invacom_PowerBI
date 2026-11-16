@@ -1,0 +1,90 @@
+table DIM_VENDEDOR
+	lineageTag: 99d980bb-e8b4-4026-9563-cdabfec21ef0
+
+	column SK_VENDEDOR
+		dataType: double
+		isHidden
+		lineageTag: 5a57936c-a904-49e8-af26-34427b62fef0
+		summarizeBy: none
+		sourceColumn: SK_VENDEDOR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SELLER_ID
+		dataType: string
+		lineageTag: d8e124f9-be77-4a0e-8751-15e8142c3e2a
+		summarizeBy: none
+		sourceColumn: SELLER_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CODIGO_POSTAL
+		dataType: string
+		lineageTag: 1aff8652-c1b7-4220-a1e4-215d7b9343c2
+		summarizeBy: none
+		sourceColumn: CODIGO_POSTAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column CIUDAD
+		dataType: string
+		lineageTag: f5ad339f-8ebb-4d5f-8e79-b6fc59febdd6
+		summarizeBy: none
+		sourceColumn: CIUDAD
+
+		annotation SummarizationSetBy = Automatic
+
+	column ESTADO
+		dataType: string
+		lineageTag: 81b62bd3-3c70-4488-9f79-c3e5ff0041d2
+		summarizeBy: none
+		sourceColumn: ESTADO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGION
+		dataType: string
+		lineageTag: fb640faf-5097-460d-b473-001148149a02
+		summarizeBy: none
+		sourceColumn: REGION
+
+		annotation SummarizationSetBy = Automatic
+
+	column LATITUD
+		dataType: double
+		lineageTag: ee4fbb52-5e9e-415f-9fc1-b5721b4c60ac
+		summarizeBy: none
+		sourceColumn: LATITUD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LONGITUD
+		dataType: double
+		lineageTag: cc3b1ba2-96f4-4751-9c61-617a82bef46a
+		summarizeBy: none
+		sourceColumn: LONGITUD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DIM_VENDEDOR = m
+		mode: import
+		source =
+				let
+				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
+				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
+				    DIM_VENDEDOR1 = DW_INVACOM{[Name="DIM_VENDEDOR"]}[Data]
+				in
+				    DIM_VENDEDOR1
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
