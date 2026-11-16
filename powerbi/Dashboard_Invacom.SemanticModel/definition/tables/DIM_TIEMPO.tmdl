@@ -1,11 +1,15 @@
 table DIM_TIEMPO
 	lineageTag: 6ac193eb-4ab4-4899-b500-f197f7b3e102
+	dataCategory: Time
 
 	column SK_TIEMPO
 		dataType: double
+		isHidden
 		lineageTag: 78036ef9-fd89-470d-a53d-361926339727
 		summarizeBy: none
 		sourceColumn: SK_TIEMPO
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -13,45 +17,45 @@ table DIM_TIEMPO
 
 	column FECHA
 		dataType: dateTime
-		formatString: General Date
+		isKey
+		formatString: Long Date
 		lineageTag: bc90ac3e-75bf-434a-b26a-71dad6d61395
 		summarizeBy: none
 		sourceColumn: FECHA
 
-		variation Variation
-			isDefault
-			relationship: 58db9354-3b1f-42a6-bd0e-473306e40906
-			defaultHierarchy: LocalDateTable_3156606b-7bbe-4815-aebd-a58b8c30de67.'Jerarquía de fechas'
+		changedProperty = DataType
 
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	column ANIO
 		dataType: double
 		lineageTag: 62e0b072-bfe6-406f-8c11-06490eaa23eb
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: ANIO
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column TRIMESTRE
 		dataType: double
 		lineageTag: 2c85c16e-818a-49e5-8ac4-73077939ba50
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: TRIMESTRE
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column MES
 		dataType: double
 		lineageTag: 9c76f556-627e-4a88-b23d-d75f830728ad
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: MES
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -60,6 +64,9 @@ table DIM_TIEMPO
 		lineageTag: 188694d8-15d5-43bc-b096-ab58506af2aa
 		summarizeBy: none
 		sourceColumn: NOMBRE_MES
+		sortByColumn: MES
+
+		changedProperty = SortByColumn
 
 		annotation SummarizationSetBy = Automatic
 
@@ -74,20 +81,20 @@ table DIM_TIEMPO
 	column DIA
 		dataType: double
 		lineageTag: b02491de-0f9e-4fbc-86e2-ec2bf417d913
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: DIA
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column DIA_SEMANA
 		dataType: double
 		lineageTag: bc4e787f-96db-42f4-9f4f-d9efa9ec86c3
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: DIA_SEMANA
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -96,6 +103,9 @@ table DIM_TIEMPO
 		lineageTag: 3a1c5824-6950-43c9-adf1-e164dc628ed7
 		summarizeBy: none
 		sourceColumn: NOMBRE_DIA
+		sortByColumn: DIA_SEMANA
+
+		changedProperty = SortByColumn
 
 		annotation SummarizationSetBy = Automatic
 
@@ -113,9 +123,10 @@ table DIM_TIEMPO
 				let
 				    Origen = Oracle.Database(pServidorOracle, [HierarchicalNavigation=true]),
 				    DW_INVACOM = Origen{[Schema="DW_INVACOM"]}[Data],
-				    DIM_TIEMPO1 = DW_INVACOM{[Name="DIM_TIEMPO"]}[Data]
+				    DIM_TIEMPO1 = DW_INVACOM{[Name="DIM_TIEMPO"]}[Data],
+				    #"Quitar Miembro Desconocido" = Table.SelectRows(DIM_TIEMPO1, each ([SK_TIEMPO] <> -1))
 				in
-				    DIM_TIEMPO1
+				    #"Quitar Miembro Desconocido"
 
 	annotation PBI_NavigationStepName = Navegación
 

@@ -3,9 +3,12 @@ table DIM_VENDEDOR
 
 	column SK_VENDEDOR
 		dataType: double
+		isHidden
 		lineageTag: 5a57936c-a904-49e8-af26-34427b62fef0
 		summarizeBy: none
 		sourceColumn: SK_VENDEDOR
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

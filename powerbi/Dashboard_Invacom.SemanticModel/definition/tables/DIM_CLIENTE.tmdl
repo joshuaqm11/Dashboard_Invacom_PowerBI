@@ -3,9 +3,12 @@ table DIM_CLIENTE
 
 	column SK_CLIENTE
 		dataType: double
+		isHidden
 		lineageTag: b8337297-d423-4581-aec4-a5468c37fe20
 		summarizeBy: none
 		sourceColumn: SK_CLIENTE
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -54,20 +57,22 @@ table DIM_CLIENTE
 	column LATITUD
 		dataType: double
 		lineageTag: 1d8d76d1-063e-42af-8eca-305ff3da4d99
-		summarizeBy: sum
+		dataCategory: Latitude
+		summarizeBy: none
 		sourceColumn: LATITUD
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column LONGITUD
 		dataType: double
 		lineageTag: 93277277-222c-4ca1-b88f-65695cee70e6
-		summarizeBy: sum
+		dataCategory: Longitude
+		summarizeBy: none
 		sourceColumn: LONGITUD
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 

@@ -21,9 +21,12 @@ table FACT_PAGOS
 
 	column SK_FECHA_COMPRA
 		dataType: double
+		isHidden
 		lineageTag: 085ca2fb-386c-4dda-a2f4-fae21c11ca2f
 		summarizeBy: none
 		sourceColumn: SK_FECHA_COMPRA
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -31,9 +34,12 @@ table FACT_PAGOS
 
 	column SK_CLIENTE
 		dataType: double
+		isHidden
 		lineageTag: c58c9d3e-115f-40a2-ba70-838a352c1da0
 		summarizeBy: none
 		sourceColumn: SK_CLIENTE
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -41,9 +47,12 @@ table FACT_PAGOS
 
 	column SK_TIPO_PAGO
 		dataType: double
+		isHidden
 		lineageTag: d9a8cb27-cbdf-42bd-b8c9-82ff805ba71b
 		summarizeBy: none
 		sourceColumn: SK_TIPO_PAGO
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -51,9 +60,12 @@ table FACT_PAGOS
 
 	column SK_ESTADO_ORDEN
 		dataType: double
+		isHidden
 		lineageTag: 67f30ac0-562b-4dcf-b569-fcdc7c4d2a63
 		summarizeBy: none
 		sourceColumn: SK_ESTADO_ORDEN
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

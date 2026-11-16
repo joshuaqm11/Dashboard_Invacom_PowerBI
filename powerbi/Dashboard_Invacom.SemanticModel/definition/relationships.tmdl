@@ -1,8 +1,3 @@
-relationship 58db9354-3b1f-42a6-bd0e-473306e40906
-	joinOnDateBehavior: datePartOnly
-	fromColumn: DIM_TIEMPO.FECHA
-	toColumn: LocalDateTable_3156606b-7bbe-4815-aebd-a58b8c30de67.Date
-
 relationship 98a7bfaf-2251-49c1-ac52-6006feb0d982
 	fromColumn: FACT_PAGOS.SK_CLIENTE
 	toColumn: DIM_CLIENTE.SK_CLIENTE

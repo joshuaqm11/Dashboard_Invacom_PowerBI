@@ -21,9 +21,12 @@ table FACT_VENTAS
 
 	column SK_FECHA_COMPRA
 		dataType: double
+		isHidden
 		lineageTag: 59ac81e4-caef-4e1d-9b75-c4cba671b0f4
 		summarizeBy: none
 		sourceColumn: SK_FECHA_COMPRA
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -31,9 +34,12 @@ table FACT_VENTAS
 
 	column SK_FECHA_ENTREGA
 		dataType: double
+		isHidden
 		lineageTag: a0b12c85-1146-47e0-913a-9875d62a03a4
 		summarizeBy: sum
 		sourceColumn: SK_FECHA_ENTREGA
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -41,9 +47,12 @@ table FACT_VENTAS
 
 	column SK_CLIENTE
 		dataType: double
+		isHidden
 		lineageTag: d43f9509-52e3-4b7a-ab5f-4eb1a220c5a9
 		summarizeBy: none
 		sourceColumn: SK_CLIENTE
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -51,9 +60,12 @@ table FACT_VENTAS
 
 	column SK_PRODUCTO
 		dataType: double
+		isHidden
 		lineageTag: 955480e5-2f16-446a-8698-f914194cb2a4
 		summarizeBy: none
 		sourceColumn: SK_PRODUCTO
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -61,9 +73,12 @@ table FACT_VENTAS
 
 	column SK_VENDEDOR
 		dataType: double
+		isHidden
 		lineageTag: 55802ab2-17da-40be-800b-2ba9ab81b5a4
 		summarizeBy: none
 		sourceColumn: SK_VENDEDOR
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -71,9 +86,12 @@ table FACT_VENTAS
 
 	column SK_ESTADO_ORDEN
 		dataType: double
+		isHidden
 		lineageTag: 4b736def-6d88-40c4-be1a-254d6ae70161
 		summarizeBy: none
 		sourceColumn: SK_ESTADO_ORDEN
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

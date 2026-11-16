@@ -1,0 +1,22 @@
+table 'Medidas Finanzas'
+	lineageTag: 07fe5e81-a7c2-427a-9c08-f0b5365712c3
+
+	column Columna1
+		dataType: string
+		lineageTag: 521025e1-c7d2-4365-bc7c-c541749b4dff
+		summarizeBy: none
+		sourceColumn: Columna1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Medidas Finanzas' = m
+		mode: import
+		source =
+				let
+				    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Columna1 = _t]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_ResultType = Table
+

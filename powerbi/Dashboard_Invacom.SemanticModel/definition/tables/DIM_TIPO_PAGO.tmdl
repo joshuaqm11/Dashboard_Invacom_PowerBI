@@ -3,9 +3,12 @@ table DIM_TIPO_PAGO
 
 	column SK_TIPO_PAGO
 		dataType: double
+		isHidden
 		lineageTag: 0098e6e0-ecea-4f75-9f72-ba8b2f6cd434
 		summarizeBy: none
 		sourceColumn: SK_TIPO_PAGO
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

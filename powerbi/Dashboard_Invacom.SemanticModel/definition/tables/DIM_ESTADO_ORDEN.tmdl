@@ -3,9 +3,12 @@ table DIM_ESTADO_ORDEN
 
 	column SK_ESTADO_ORDEN
 		dataType: double
+		isHidden
 		lineageTag: e3257183-c941-4c75-a5b8-df4c56ba40af
 		summarizeBy: none
 		sourceColumn: SK_ESTADO_ORDEN
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
