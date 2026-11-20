@@ -34,8 +34,8 @@ Cada responsable filtra el año 2017 en Power BI y anota el valor que da su medi
 
 | Código | Línea base aprobada | Valor en Power BI (2017) | ¿Coincide? | Captura |
 |---|---|---|---|---|
-| KPI-VEN-01 | 590,881 BRL | | | |
-| KPI-VEN-02 | 3,698 | | | |
+| KPI-VEN-01 | 590,881 BRL | 590,881 BRL | Sí | `evidencias/validacion_kpis_ventas_2017.png` |
+| KPI-VEN-02 | 3,698 | 3,698 | Sí | `evidencias/validacion_kpis_ventas_2017.png` |
 | KPI-FIN-01 | 160.23 BRL | | | |
 | KPI-FIN-02 | 13.85 % | | | |
 | KPI-LOG-01 | 94.35 % | | | |

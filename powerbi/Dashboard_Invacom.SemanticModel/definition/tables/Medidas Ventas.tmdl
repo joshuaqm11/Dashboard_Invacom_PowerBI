@@ -1,8 +1,65 @@
 table 'Medidas Ventas'
 	lineageTag: 7815bb72-c3be-4d69-a58c-b6291f42cac5
 
+	/// Venta total (precio + flete) sin órdenes canceladas ni no disponibles
+	measure 'Ventas válidas' =
+			CALCULATE (
+				SUM ( FACT_VENTAS[MONTO_TOTAL] ),
+				NOT DIM_ESTADO_ORDEN[ESTADO_ORDEN_ES] IN { "Cancelada", "No disponible" }
+			)
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Órdenes únicas sin canceladas ni no disponibles
+	measure 'Órdenes válidas' =
+			CALCULATE (
+				DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+				NOT DIM_ESTADO_ORDEN[ESTADO_ORDEN_ES] IN { "Cancelada", "No disponible" }
+			)
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Cantidad de meses del filtro actual que tienen ventas
+	measure 'Meses con ventas' =
+			COUNTROWS (
+				FILTER ( VALUES ( DIM_TIEMPO[ANIO_MES] ), [Ventas válidas] > 0 )
+			)
+		formatString: 0
+		displayFolder: KPIs Ventas
+
+	/// KPI-VEN-01: ventas válidas divididas entre los meses del período
+	measure 'Ventas promedio mensuales' = DIVIDE ( [Ventas válidas], [Meses con ventas] )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// KPI-VEN-02: órdenes válidas divididas entre los meses del período
+	measure 'Órdenes promedio mensuales' = DIVIDE ( [Órdenes válidas], [Meses con ventas] )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// KPI-VEN-01 del mes anterior
+	measure 'Ventas mes anterior' = CALCULATE ( [Ventas promedio mensuales], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Cambio % de KPI-VEN-01 contra el mes anterior
+	measure 'Var VEN-01 vs mes anterior' = DIVIDE ( [Ventas promedio mensuales] - [Ventas mes anterior], [Ventas mes anterior] )
+		formatString: 0.00%
+		displayFolder: KPIs Ventas
+
+	/// KPI-VEN-02 del mes anterior
+	measure 'Órdenes mes anterior' = CALCULATE ( [Órdenes promedio mensuales], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Cambio % de KPI-VEN-02 contra el mes anterior
+	measure 'Var VEN-02 vs mes anterior' = DIVIDE ( [Órdenes promedio mensuales] - [Órdenes mes anterior], [Órdenes mes anterior] )
+		formatString: 0.00%
+		displayFolder: KPIs Ventas
+
 	column Columna1
 		dataType: string
+		isHidden
 		lineageTag: 9a817a6d-efa1-43e8-9461-dc54cd2c54fe
 		summarizeBy: none
 		sourceColumn: Columna1
