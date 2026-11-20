@@ -1,0 +1,53 @@
+/// Metas y límites del semáforo de los 8 KPIs aprobados (propuesta de KPIs). Mayor es mejor: verde si valor >= LimiteVerde, rojo si valor < LimiteRojo. Menor es mejor: verde si valor <= LimiteVerde, rojo si valor > LimiteRojo. Lo demás es amarillo.
+table 'Metas KPI'
+
+	column Codigo
+		isNameInferred
+		sourceColumn: [Codigo]
+
+	column KPI
+		isNameInferred
+		sourceColumn: [KPI]
+
+	column Responsable
+		isNameInferred
+		sourceColumn: [Responsable]
+
+	column LineaBase
+		isNameInferred
+		sourceColumn: [LineaBase]
+
+	column Meta
+		isNameInferred
+		sourceColumn: [Meta]
+
+	column LimiteVerde
+		isNameInferred
+		sourceColumn: [LimiteVerde]
+
+	column LimiteRojo
+		isNameInferred
+		sourceColumn: [LimiteRojo]
+
+	column MejorSi
+		isNameInferred
+		sourceColumn: [MejorSi]
+
+	partition 'Metas KPI' = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Codigo", STRING, "KPI", STRING, "Responsable", STRING,
+				    "LineaBase", DOUBLE, "Meta", DOUBLE, "LimiteVerde", DOUBLE, "LimiteRojo", DOUBLE, "MejorSi", STRING,
+				    {
+				        { "KPI-VEN-01", "Ventas promedio mensuales", "Joshua", 590881, 1000000, 1000000, 800000, "Mayor" },
+				        { "KPI-VEN-02", "Órdenes promedio mensuales", "Joshua", 3698, 6500, 6500, 5500, "Mayor" },
+				        { "KPI-FIN-01", "Ticket promedio por orden", "Fernanda", 160.23, 170, 170, 155, "Mayor" },
+				        { "KPI-FIN-02", "Peso del flete sobre la venta", "Fernanda", 0.1385, 0.13, 0.13, 0.145, "Menor" },
+				        { "KPI-LOG-01", "% de entregas a tiempo", "Fabio", 0.9435, 0.95, 0.95, 0.92, "Mayor" },
+				        { "KPI-LOG-02", "Días promedio de entrega", "Fabio", 12.54, 10, 10, 12.5, "Menor" },
+				        { "KPI-CLI-01", "% de reseñas de 4 y 5 estrellas", "Joseph", 0.778, 0.8, 0.8, 0.76, "Mayor" },
+				        { "KPI-CLI-02", "Tasa de cancelación de órdenes", "Joseph", 0.00458, 0.004, 0.004, 0.005, "Menor" }
+				    }
+				)
+
