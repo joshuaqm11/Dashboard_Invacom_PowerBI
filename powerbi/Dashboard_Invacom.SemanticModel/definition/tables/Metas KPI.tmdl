@@ -1,35 +1,44 @@
 /// Metas y límites del semáforo de los 8 KPIs aprobados (propuesta de KPIs). Mayor es mejor: verde si valor >= LimiteVerde, rojo si valor < LimiteRojo. Menor es mejor: verde si valor <= LimiteVerde, rojo si valor > LimiteRojo. Lo demás es amarillo.
 table 'Metas KPI'
+	lineageTag: 7aaa5b26-38ab-4d7f-b444-f7a35b190ad5
 
 	column Codigo
+		lineageTag: 1143fc08-9159-47ca-bfd8-59fe80750201
 		isNameInferred
 		sourceColumn: [Codigo]
 
 	column KPI
+		lineageTag: 1ac86db1-8a1a-4dc3-8fcc-8ef5adc94f41
 		isNameInferred
 		sourceColumn: [KPI]
 
 	column Responsable
+		lineageTag: f30f6b25-d9c7-4727-bd31-f977b6c2153a
 		isNameInferred
 		sourceColumn: [Responsable]
 
 	column LineaBase
+		lineageTag: 6291f64e-6626-41b6-972d-3bfea34bbd2f
 		isNameInferred
 		sourceColumn: [LineaBase]
 
 	column Meta
+		lineageTag: f2a72420-5c75-4329-8ede-803eeb174c2e
 		isNameInferred
 		sourceColumn: [Meta]
 
 	column LimiteVerde
+		lineageTag: 57abc2f8-b76f-483e-b359-76df1db6b34d
 		isNameInferred
 		sourceColumn: [LimiteVerde]
 
 	column LimiteRojo
+		lineageTag: 2e94dd29-ee21-41b3-ab2e-6b173ed99cee
 		isNameInferred
 		sourceColumn: [LimiteRojo]
 
 	column MejorSi
+		lineageTag: a01eb6b4-fc2e-48f0-a500-2b3d756b62e5
 		isNameInferred
 		sourceColumn: [MejorSi]
 

@@ -70,11 +70,13 @@ table 'Medidas Ventas'
 	measure 'Meta VEN-01' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-VEN-01" )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: a8d5ac95-8bd9-4013-a71b-4dc054d93429
 
 	/// Meta de KPI-VEN-02 leída de la tabla Metas KPI
 	measure 'Meta VEN-02' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-VEN-02" )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: e2df577e-de2b-41d9-b0d3-c29f4b3a7e59
 
 	/// Color del semáforo de KPI-VEN-01 (mayor es mejor). Se usa en formato condicional: fx > Valor del campo
 	measure 'Color VEN-01' =
@@ -90,6 +92,7 @@ table 'Medidas Ventas'
 			        "#F9A825"
 			    )
 		displayFolder: KPIs Ventas
+		lineageTag: b2c99ebf-9af1-4432-9505-6730c6e2a128
 
 	/// Color del semáforo de KPI-VEN-02 (mayor es mejor). Se usa en formato condicional: fx > Valor del campo
 	measure 'Color VEN-02' =
@@ -105,6 +108,7 @@ table 'Medidas Ventas'
 			        "#F9A825"
 			    )
 		displayFolder: KPIs Ventas
+		lineageTag: af5988ea-22b2-4eb5-b5e6-86633a473536
 
 	column Columna1
 		dataType: string
