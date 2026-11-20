@@ -31,6 +31,7 @@ table DIM_TIEMPO
 
 	column ANIO
 		dataType: double
+		formatString: 0
 		lineageTag: 62e0b072-bfe6-406f-8c11-06490eaa23eb
 		summarizeBy: none
 		sourceColumn: ANIO

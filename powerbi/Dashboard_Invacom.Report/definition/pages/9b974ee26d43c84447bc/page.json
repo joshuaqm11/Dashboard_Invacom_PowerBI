@@ -4,5 +4,12 @@
   "displayName": "Ventas",
   "displayOption": "FitToPage",
   "height": 1080,
-  "width": 1920
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "da26e9602e7528e8ecde",
+      "target": "379436570d6d32a3d0be",
+      "type": "NoFilter"
+    }
+  ]
 }
