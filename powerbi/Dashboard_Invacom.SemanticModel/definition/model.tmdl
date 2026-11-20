@@ -11,7 +11,7 @@ annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_QueryOrder = ["FACT_PAGOS","FACT_VENTAS","DIM_CLIENTE","DIM_TIEMPO","DIM_VENDEDOR","DIM_ESTADO_ORDEN","DIM_PRODUCTO","DIM_TIPO_PAGO","pServidorOracle","Medidas Ventas","Medidas Finanzas","Medidas Logística","Medidas Clientes"]
 
-annotation PBI_ProTooling = ["DevMode"]
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
 
 ref table FACT_PAGOS
 ref table FACT_VENTAS
@@ -25,6 +25,7 @@ ref table 'Medidas Ventas'
 ref table 'Medidas Finanzas'
 ref table 'Medidas Logística'
 ref table 'Medidas Clientes'
+ref table 'Metas KPI'
 
 ref cultureInfo es-CR
 

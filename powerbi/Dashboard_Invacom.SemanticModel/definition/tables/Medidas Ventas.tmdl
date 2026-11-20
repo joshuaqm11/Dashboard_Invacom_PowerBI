@@ -9,6 +9,7 @@ table 'Medidas Ventas'
 			)
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: c685eaff-d0bb-49ff-817c-0aad05e5c906
 
 	/// Órdenes únicas sin canceladas ni no disponibles
 	measure 'Órdenes válidas' =
@@ -18,6 +19,7 @@ table 'Medidas Ventas'
 			)
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: 3c79d6eb-b00b-4271-8568-7994d9158356
 
 	/// Cantidad de meses del filtro actual que tienen ventas
 	measure 'Meses con ventas' =
@@ -26,35 +28,82 @@ table 'Medidas Ventas'
 			)
 		formatString: 0
 		displayFolder: KPIs Ventas
+		lineageTag: a4dc5b5f-5c6a-4acf-bf4c-6a8491b5f854
 
 	/// KPI-VEN-01: ventas válidas divididas entre los meses del período
 	measure 'Ventas promedio mensuales' = DIVIDE ( [Ventas válidas], [Meses con ventas] )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: 1db46947-1e47-4d5e-8b4f-5e7523265729
 
 	/// KPI-VEN-02: órdenes válidas divididas entre los meses del período
 	measure 'Órdenes promedio mensuales' = DIVIDE ( [Órdenes válidas], [Meses con ventas] )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: 86655ac8-8613-43af-a24d-ce93829d671b
 
 	/// KPI-VEN-01 del mes anterior
 	measure 'Ventas mes anterior' = CALCULATE ( [Ventas promedio mensuales], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: 5c0fa562-f0e9-450e-8766-2669ac038d52
 
 	/// Cambio % de KPI-VEN-01 contra el mes anterior
 	measure 'Var VEN-01 vs mes anterior' = DIVIDE ( [Ventas promedio mensuales] - [Ventas mes anterior], [Ventas mes anterior] )
 		formatString: 0.00%
 		displayFolder: KPIs Ventas
+		lineageTag: 76f5d8b9-9b84-4488-b538-f218e90df26c
 
 	/// KPI-VEN-02 del mes anterior
 	measure 'Órdenes mes anterior' = CALCULATE ( [Órdenes promedio mensuales], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
 		formatString: #,0
 		displayFolder: KPIs Ventas
+		lineageTag: cac37875-2ae1-4169-afc7-1d751c6f76d2
 
 	/// Cambio % de KPI-VEN-02 contra el mes anterior
 	measure 'Var VEN-02 vs mes anterior' = DIVIDE ( [Órdenes promedio mensuales] - [Órdenes mes anterior], [Órdenes mes anterior] )
 		formatString: 0.00%
+		displayFolder: KPIs Ventas
+		lineageTag: 60b61a89-54df-4058-992e-26dcb68ffa63
+
+	/// Meta de KPI-VEN-01 leída de la tabla Metas KPI
+	measure 'Meta VEN-01' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-VEN-01" )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Meta de KPI-VEN-02 leída de la tabla Metas KPI
+	measure 'Meta VEN-02' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-VEN-02" )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+
+	/// Color del semáforo de KPI-VEN-01 (mayor es mejor). Se usa en formato condicional: fx > Valor del campo
+	measure 'Color VEN-01' =
+			VAR valor = [Ventas promedio mensuales]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-VEN-01" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-VEN-01" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor >= verde, "#2E7D32",
+			        valor <  rojo,  "#C62828",
+			        "#F9A825"
+			    )
+		displayFolder: KPIs Ventas
+
+	/// Color del semáforo de KPI-VEN-02 (mayor es mejor). Se usa en formato condicional: fx > Valor del campo
+	measure 'Color VEN-02' =
+			VAR valor = [Órdenes promedio mensuales]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-VEN-02" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-VEN-02" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor >= verde, "#2E7D32",
+			        valor <  rojo,  "#C62828",
+			        "#F9A825"
+			    )
 		displayFolder: KPIs Ventas
 
 	column Columna1
