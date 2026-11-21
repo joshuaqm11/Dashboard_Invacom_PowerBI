@@ -177,6 +177,19 @@ table FACT_VENTAS
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Estado de la entrega de la orden: A tiempo, Con atraso o Sin entregar (para el árbol de descomposición)
+	column Entrega =
+			SWITCH (
+			    FACT_VENTAS[ENTREGADO_A_TIEMPO],
+			    1, "A tiempo",
+			    0, "Con atraso",
+			    "Sin entregar"
+			)
+		lineageTag: 4296f462-d634-4888-91a4-1c338d299e2f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition FACT_VENTAS = m
 		mode: import
 		source =
