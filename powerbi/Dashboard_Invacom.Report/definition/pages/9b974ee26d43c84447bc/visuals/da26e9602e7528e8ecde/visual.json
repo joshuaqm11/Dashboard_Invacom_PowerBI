@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "da26e9602e7528e8ecde",
   "position": {
-    "x": 959.12030370467335,
+    "x": 959.1203037046733,
     "y": 16.286948553475586,
     "z": 3,
     "height": 148.39219793166646,
-    "width": 948.26233800235639,
+    "width": 948.2623380023564,
     "tabOrder": 3
   },
   "visual": {
@@ -102,6 +102,11 @@
           }
         }
       ]
+    },
+    "syncGroup": {
+      "groupName": "ANIO",
+      "fieldChanges": true,
+      "filterChanges": true
     },
     "drillFilterOtherVisuals": true
   },
