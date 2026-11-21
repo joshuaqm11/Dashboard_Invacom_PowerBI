@@ -1,8 +1,159 @@
 table 'Medidas Clientes'
 	lineageTag: f02e18d0-7919-470c-b621-2898000fe720
 
+	/// Órdenes únicas que tienen reseña (denominador de KPI-CLI-01)
+	measure 'Órdenes con reseña' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    KEEPFILTERS ( NOT ISBLANK ( FACT_VENTAS[REVIEW_SCORE] ) )
+			)
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 8a96ff99-d07c-479d-8883-eb809b440c9f
+
+	/// Órdenes únicas con reseña de 4 o 5 estrellas
+	measure 'Reseñas 4 y 5' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    KEEPFILTERS ( FACT_VENTAS[REVIEW_SCORE] >= 4 )
+			)
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 8f8d223b-f5a6-449c-94ad-670c80ba47fa
+
+	/// KPI-CLI-01: órdenes con reseña 4 y 5 entre órdenes con reseña. Línea base 2017 = 77.80 %
+	measure '% reseñas 4 y 5' = DIVIDE ( [Reseñas 4 y 5], [Órdenes con reseña] )
+		formatString: 0.00%
+		displayFolder: KPIs Clientes
+		lineageTag: ef1e71c2-9b38-4360-8568-5503e856d8bd
+
+	/// Órdenes únicas en el contexto (todas, sin filtrar estado)
+	measure 'Total órdenes' = COUNTROWS ( VALUES ( FACT_VENTAS[ORDER_ID] ) )
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 50406a6f-88f5-4a76-a7fe-c3880fa0a44e
+
+	/// Órdenes únicas con estado Cancelada
+	measure 'Órdenes canceladas' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    DIM_ESTADO_ORDEN[ESTADO_ORDEN_ES] = "Cancelada"
+			)
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 5ffaa459-c241-46c9-8236-b8711ae644c0
+
+	/// KPI-CLI-02: órdenes canceladas entre total de órdenes. Línea base 2017 = 0.458 %
+	measure 'Tasa de cancelación' = DIVIDE ( [Órdenes canceladas], [Total órdenes] )
+		formatString: 0.000%
+		displayFolder: KPIs Clientes
+		lineageTag: 64eff1c2-f16b-415c-a08f-324190b1355a
+
+	/// Órdenes únicas con reseña de 1 o 2 estrellas (se analiza en el árbol de descomposición)
+	measure 'Reseñas negativas' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    KEEPFILTERS ( FACT_VENTAS[REVIEW_SCORE] <= 2 )
+			)
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 143345a3-bcb7-4aed-b3b3-9056bd71970d
+
+	/// Parte del total de reseñas negativas que cae en la región, estado o categoría vista
+	measure '% del total de reseñas negativas' =
+			DIVIDE (
+			    [Reseñas negativas],
+			    CALCULATE ( [Reseñas negativas], REMOVEFILTERS ( DIM_CLIENTE ), REMOVEFILTERS ( DIM_PRODUCTO ) )
+			)
+		formatString: 0.00%
+		displayFolder: KPIs Clientes
+		lineageTag: efb92a6c-31eb-498d-83eb-8c2ccee96035
+
+	/// Órdenes canceladas desde el 1 de enero hasta el mes visto
+	measure 'Cancelaciones acumuladas del año' = TOTALYTD ( [Órdenes canceladas], DIM_TIEMPO[FECHA] )
+		formatString: #,0
+		displayFolder: KPIs Clientes
+		lineageTag: 39e12ac2-5bfd-42c1-bf20-b28edf73de22
+
+	/// Diferencia en puntos de KPI-CLI-01 contra el mes anterior (positivo es bueno)
+	measure 'Var CLI-01 vs mes anterior' =
+			[% reseñas 4 y 5]
+			    - CALCULATE ( [% reseñas 4 y 5], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: KPIs Clientes
+		lineageTag: 193f7ca5-6a35-4901-8fb1-0b2709d6b793
+
+	/// Diferencia en puntos de KPI-CLI-02 contra el mes anterior (negativo es bueno)
+	measure 'Var CLI-02 vs mes anterior' =
+			[Tasa de cancelación]
+			    - CALCULATE ( [Tasa de cancelación], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+		formatString: +0.000%;-0.000%;0.000%
+		displayFolder: KPIs Clientes
+		lineageTag: 49216b3d-6596-4013-957d-86fa6c9066cf
+
+	/// Meta de KPI-CLI-01 leída de la tabla Metas KPI
+	measure 'Meta CLI-01' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-CLI-01" )
+		formatString: 0.00%
+		displayFolder: KPIs Clientes
+		lineageTag: 9a13800f-763a-470a-aaaa-fe6a046e043e
+
+	/// Meta de KPI-CLI-02 leída de la tabla Metas KPI
+	measure 'Meta CLI-02' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-CLI-02" )
+		formatString: 0.000%
+		displayFolder: KPIs Clientes
+		lineageTag: 506ee6ab-1455-4ca1-8065-3498f2d11616
+
+	/// Color del semáforo de KPI-CLI-01 (mayor es mejor). Se usa en formato condicional: fx > Valor del campo
+	measure 'Color CLI-01' =
+			VAR valor = [% reseñas 4 y 5]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-CLI-01" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-CLI-01" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor >= verde, "#2E7D32",
+			        valor <  rojo,  "#C62828",
+			        "#F9A825"
+			    )
+		displayFolder: KPIs Clientes
+		lineageTag: 3a051983-21cc-4363-85c6-23f7c8a2bcbb
+
+	/// Color del semáforo de KPI-CLI-02 (menor es mejor). Se usa en formato condicional: fx > Valor del campo
+	measure 'Color CLI-02' =
+			VAR valor = [Tasa de cancelación]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-CLI-02" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-CLI-02" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor <= verde, "#2E7D32",
+			        valor >  rojo,  "#C62828",
+			        "#F9A825"
+			    )
+		displayFolder: KPIs Clientes
+		lineageTag: f37cab64-8932-4612-9630-5b84d606a090
+
+	/// Verde si la variación de KPI-CLI-01 es positiva o cero; rojo si es negativa
+	measure 'Color Var CLI-01' =
+			VAR v = [Var CLI-01 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Clientes
+		lineageTag: 74bfa3b1-baa6-42fb-a7ee-459f582774fa
+
+	/// Verde si la variación de KPI-CLI-02 es negativa o cero (bajan las cancelaciones); rojo si sube
+	measure 'Color Var CLI-02' =
+			VAR v = [Var CLI-02 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Clientes
+		lineageTag: 8e53a64c-6904-4769-92a6-3eaf7fce3c06
+
 	column Columna1
 		dataType: string
+		isHidden
 		lineageTag: 9cf0a3f8-6ac5-4838-81a8-f713aae2551a
 		summarizeBy: none
 		sourceColumn: Columna1
