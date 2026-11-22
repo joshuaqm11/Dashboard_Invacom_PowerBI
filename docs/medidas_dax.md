@@ -39,6 +39,11 @@ La tabla `Metas KPI` (metas y límites del semáforo de los 8 KPIs) es una tabla
 | `PREVIOUSMONTH` | % a tiempo mes anterior, Días mes anterior | Fabio |
 | `USERELATIONSHIP` | Órdenes entregadas en el mes | Fabio |
 | `MAX` | Días promedio de entrega | Fabio |
+| `SAMEPERIODLASTYEAR` | Ticket año anterior, Flete año anterior | Fernanda |
+| `SELECTEDVALUE` | Título Finanzas | Fernanda |
+| `SUM`, `DISTINCTCOUNT`, `DIVIDE` | Ticket promedio, Peso del flete | Fernanda |
+| `CALCULATE`, `DATEADD` | Peso del flete, Var FIN-01 y FIN-02 vs mes anterior | Fernanda |
+| `LOOKUPVALUE`, `VAR`/`RETURN`, `SWITCH`, `ISBLANK` | Meta y Color FIN-01/FIN-02, Color Var FIN-01/FIN-02 | Fernanda |
 | | | |
 
 ---
@@ -152,12 +157,142 @@ RETURN
 
 ## Fernanda — Medidas Finanzas
 
-### [Nombre de la medida]
+Carpeta en el modelo: `Medidas Finanzas`.
+
+Validación con 2017 (línea base aprobada): **Ticket promedio = 160.23 BRL** y **Peso del flete = 13.85 %**. Ambas coinciden (captura en `evidencias/validacion_kpis_finanzas_2017.png`).
+Período meta (enero–agosto 2018): 160.74 BRL (amarillo, meta 170.00 BRL) y 14.57 % (rojo, meta ≤ 13.00 %).
+
+### Ticket promedio (KPI-FIN-01)
 ```dax
--- código
+Ticket promedio =
+DIVIDE (
+    SUM ( FACT_VENTAS[MONTO_TOTAL] ),
+    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] )
+)
 ```
-**Qué hace:**
-**Funciones usadas y por qué:**
+**Qué hace:** el KPI-FIN-01: cuánto paga en promedio un cliente por orden (precio + flete).
+**Funciones usadas y por qué:** `SUM` suma lo cobrado en todas las filas. `DISTINCTCOUNT` cuenta cada `ORDER_ID` una sola vez, porque `FACT_VENTAS` tiene una fila por **ítem** y una orden con 3 productos tiene 3 filas; si se usara `COUNT`, el ticket saldría como un promedio por ítem y no por orden. `DIVIDE` evita el error cuando no hay órdenes.
+**Por qué usa todas las órdenes (y las ventas no):** así quedó aprobado en la propuesta. El ticket describe el **comportamiento de compra** en el momento de ordenar, incluida la orden que luego se cancela; las ventas válidas miden **ingreso real**, y por eso excluyen canceladas y no disponibles. Las canceladas son menos del 0.5 % de las órdenes, así que casi no mueven el ticket. Es *lagging*: es el resultado de lo que ya compró cada cliente.
+
+### Peso del flete (KPI-FIN-02)
+```dax
+Peso del flete =
+VAR flete =
+    CALCULATE (
+        SUM ( FACT_VENTAS[FLETE] ),
+        NOT DIM_ESTADO_ORDEN[ESTADO_ORDEN_ES] IN { "Cancelada", "No disponible" }
+    )
+VAR venta = [Ventas válidas]
+RETURN
+    DIVIDE ( flete, venta )
+```
+**Qué hace:** el KPI-FIN-02: qué parte de cada real vendido corresponde al flete. Menor es mejor.
+**Funciones usadas y por qué:** `CALCULATE` suma el flete con el **mismo filtro de estados** que usa `[Ventas válidas]` de Joshua, para que numerador y denominador hablen de las mismas órdenes. `VAR` guarda el flete y la venta con un nombre: se lee como la fórmula de la propuesta (flete ÷ venta), cada parte se calcula una sola vez y se puede revisar por separado. `RETURN` devuelve la división y `DIVIDE` evita el error si no hay ventas. Reutilizar `[Ventas válidas]` evita escribir dos veces la misma lógica. Es *leading*: un flete caro desincentiva la compra y presiona el margen antes de que se note en las ventas.
+
+### Ticket año anterior y Var FIN-01 vs año anterior
+```dax
+Ticket año anterior =
+CALCULATE ( [Ticket promedio], SAMEPERIODLASTYEAR ( DIM_TIEMPO[FECHA] ) )
+
+Var FIN-01 vs año anterior =
+VAR actual   = [Ticket promedio]
+VAR anterior = [Ticket año anterior]
+RETURN
+    DIVIDE ( actual - anterior, anterior )
+```
+**Qué hace:** compara el ticket con el **mismo período del año anterior** (enero–agosto 2018 contra enero–agosto 2017) y da el cambio en %. Es la variación que muestran las tarjetas de la página Finanzas: +1.03 % en 2018.
+**Funciones usadas y por qué:** `SAMEPERIODLASTYEAR` corre las fechas del filtro **un año** hacia atrás: si el filtro es marzo 2018, calcula marzo 2017. `CALCULATE` recalcula el ticket con esas fechas. Funciona porque `DIM_TIEMPO` está marcada como tabla de fechas. `VAR`/`RETURN` dejan clara la fórmula (actual − anterior) ÷ anterior y `DIVIDE` evita el error si no hay año anterior (2016 está fuera del análisis por datos incompletos).
+
+### Flete año anterior y Var FIN-02 vs año anterior
+```dax
+Flete año anterior =
+CALCULATE ( [Peso del flete], SAMEPERIODLASTYEAR ( DIM_TIEMPO[FECHA] ) )
+
+Var FIN-02 vs año anterior =
+[Peso del flete] - [Flete año anterior]
+```
+**Qué hace:** lo mismo para el flete. En 2018 el peso del flete subió +0.75 puntos frente al mismo período de 2017.
+**Por qué se resta y no se divide:** el peso del flete **ya es un porcentaje**. Restar dos porcentajes da la diferencia en **puntos porcentuales** (14.57 % − 13.82 % = +0.75 puntos), que es como se comunica el cambio de una tasa. Dividir daría un "porcentaje de un porcentaje" (+5.4 %), que se presta a confusión. Aquí una variación **negativa es buena** (baja el flete).
+
+### Var FIN-01 y Var FIN-02 vs mes anterior
+```dax
+Var FIN-01 vs mes anterior =
+VAR actual   = [Ticket promedio]
+VAR anterior = CALCULATE ( [Ticket promedio], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+RETURN
+    DIVIDE ( actual - anterior, anterior )
+
+Var FIN-02 vs mes anterior =
+[Peso del flete] - CALCULATE ( [Peso del flete], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+```
+**Qué hace:** la comparación mensual que pide el enunciado; la usan la tarjeta y la matriz de la Portada.
+**Funciones usadas y por qué:** `DATEADD(..., -1, MONTH)` corre las fechas del filtro **un mes** atrás (marzo 2018 → febrero 2018).
+**Diferencia con `SAMEPERIODLASTYEAR`:** `SAMEPERIODLASTYEAR` siempre retrocede **un año** (marzo 2018 → marzo 2017) y sirve para comparar sin el efecto de la temporada; equivale a `DATEADD(..., -1, YEAR)`. `DATEADD` permite elegir el intervalo y la cantidad (−1 mes, −3 meses, −1 trimestre…); con −1 mes muestra la tendencia inmediata.
+
+### Meta FIN-01 y Meta FIN-02
+```dax
+Meta FIN-01 = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-FIN-01" )
+Meta FIN-02 = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-FIN-02" )
+```
+**Qué hace:** trae la meta aprobada (170.00 BRL y 13.00 %). Se muestra en las tarjetas y es el **valor de destino** del Bullet Chart.
+**Funciones usadas y por qué:** `LOOKUPVALUE` busca en `Metas KPI` la fila del código y devuelve la meta; si la meta cambia, se cambia solo en la tabla.
+
+### Color FIN-01 y Color FIN-02 (semáforo)
+```dax
+Color FIN-01 =                       -- mayor es mejor
+VAR valor = [Ticket promedio]
+VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-FIN-01" )
+VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-FIN-01" )
+RETURN
+    SWITCH ( TRUE (),
+        ISBLANK ( valor ), BLANK (),
+        valor >= verde, "#2E7D32",
+        valor <  rojo,  "#C62828",
+        "#F9A825" )
+
+Color FIN-02 =                       -- menor es mejor
+VAR valor = [Peso del flete]
+VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-FIN-02" )
+VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-FIN-02" )
+RETURN
+    SWITCH ( TRUE (),
+        ISBLANK ( valor ), BLANK (),
+        valor <= verde, "#2E7D32",
+        valor >  rojo,  "#C62828",
+        "#F9A825" )
+```
+**Qué hace:** el color del semáforo. FIN-01: verde ≥ 170, rojo < 155. FIN-02: verde ≤ 13.00 %, rojo > 14.50 %. Lo de en medio es amarillo. Se usa en el formato condicional (**fx → Valor del campo**) de las tarjetas y de las barras por estado.
+**Funciones usadas y por qué:** `SWITCH(TRUE(), ...)` es la plantilla del semáforo: compara `TRUE()` contra cada condición **en orden** y devuelve el resultado de la **primera** que se cumple; si ninguna se cumple, devuelve el último valor (amarillo). Por eso el orden importa: primero el vacío, luego verde, luego rojo. Cuando **menor es mejor** (FIN-02) solo se invierten las comparaciones: `<=` para verde y `>` para rojo. `ISBLANK` evita pintar un color cuando no hay datos.
+
+### Color Var FIN-01 y Color Var FIN-02
+```dax
+Color Var FIN-01 =
+VAR v = [Var FIN-01 vs mes anterior]
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+
+Color Var FIN-02 =
+VAR v = [Var FIN-02 vs mes anterior]
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
+```
+**Qué hace:** pinta la variación contra el mes anterior en la Portada: en el ticket, subir es verde; en el flete, **bajar** es verde.
+
+### Título Finanzas (título dinámico)
+```dax
+Título Finanzas =
+"Finanzas · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+```
+**Qué hace:** el título de la página cambia según el filtro: con un solo mes elegido muestra, por ejemplo, "Finanzas · 2018-03"; con varios meses, "Finanzas · período seleccionado".
+**Funciones usadas y por qué:** `SELECTEDVALUE` devuelve el valor de la columna si hay **exactamente uno** en el contexto; si hay varios o ninguno, devuelve el texto alternativo. `&` une los textos.
+
+### Página Finanzas: qué muestra
+- **Tarjetas** de KPI-FIN-01 y KPI-FIN-02 con semáforo, meta y variación contra el año anterior (verde/rojo según si mejora).
+- **Bullet Chart (AppSource)**: peso del flete por región contra la meta de 13 %, con el mismo eje para comparar regiones.
+- **Columnas**: ticket promedio por mes, 2017 contra 2018. Se quitó la interacción con el segmentador de Año (**Editar interacciones → Ninguno**) para que siempre compare los dos años.
+- **Barras**: peso del flete por estado, coloreadas con `Color FIN-02`.
+
+**Hallazgo:** en 2018 solo **São Paulo (SP)** cumple la meta de flete (≈ 12 %); los estados del norte y nordeste superan el 18 %. Como SP concentra la mayor parte de las ventas, sostiene el promedio nacional en 14.57 %. Para cumplir el KPI-FIN-02, el foco está en el costo de los envíos fuera del sudeste.
 
 ---
 
