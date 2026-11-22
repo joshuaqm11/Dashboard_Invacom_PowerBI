@@ -1,0 +1,231 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "log0mapa00000000000",
+  "position": {
+    "x": 1260,
+    "y": 140,
+    "z": 6000,
+    "height": 920,
+    "width": 640,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "azureMap",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_CLIENTE"
+                    }
+                  },
+                  "Property": "Estado (mapa)"
+                }
+              },
+              "queryRef": "DIM_CLIENTE.Estado (mapa)",
+              "nativeQueryRef": "Estado (mapa)",
+              "active": true
+            }
+          ]
+        },
+        "Size": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Logística"
+                    }
+                  },
+                  "Property": "Órdenes entregadas"
+                }
+              },
+              "queryRef": "Medidas Logística.Órdenes entregadas",
+              "nativeQueryRef": "Órdenes entregadas"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Logística"
+                    }
+                  },
+                  "Property": "% entregas a tiempo"
+                }
+              },
+              "queryRef": "Medidas Logística.% entregas a tiempo",
+              "nativeQueryRef": "% entregas a tiempo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Logística"
+                    }
+                  },
+                  "Property": "Días promedio de entrega"
+                }
+              },
+              "queryRef": "Medidas Logística.Días promedio de entrega",
+              "nativeQueryRef": "Días promedio de entrega"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Logística"
+                        }
+                      },
+                      "Property": "Color LOG-01"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "mapControls": [
+        {
+          "properties": {
+            "zoom": {
+              "expr": {
+                "Literal": {
+                  "Value": "3.54D"
+                }
+              }
+            },
+            "centerLatitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "-14.19898306338645D"
+                }
+              }
+            },
+            "centerLongitude": {
+              "expr": {
+                "Literal": {
+                  "Value": "-51.33957290649414D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Órdenes entregadas por estado · color = % a tiempo vs meta 95 %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4f47589f76a6aa28af55",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_CLIENTE"
+              }
+            },
+            "Property": "Estado (mapa)"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "893e4a002b4e0f1faca0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Logística"
+              }
+            },
+            "Property": "Órdenes entregadas"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "fdeecaf010bf012bb46e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Logística"
+              }
+            },
+            "Property": "% entregas a tiempo"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f5df02f944b9400a867b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Logística"
+              }
+            },
+            "Property": "Días promedio de entrega"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

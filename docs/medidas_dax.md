@@ -394,6 +394,30 @@ RETURN SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
 
 **Por qué los dos KPIs son leading:** miden el proceso de entrega, que ocurre **antes** de los resultados: entregas tarde o lentas anticipan reseñas malas, cancelaciones y menos recompra (KPIs lagging). Se pueden corregir dentro del mes.
 
+
+### Título Logística
+```dax
+Título Logística = "Logística · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+```
+**Qué hace:** título dinámico de la página: muestra el mes elegido en los segmentadores o «período seleccionado» si hay varios meses.
+**Funciones usadas y por qué:** `SELECTEDVALUE` devuelve el valor de la columna si hay uno solo en el contexto y, si no, el texto alternativo.
+
+### Columna calculada `Estado (mapa)` en `DIM_CLIENTE`
+```dax
+Estado (mapa) =
+VAR nombre = SWITCH ( DIM_CLIENTE[ESTADO], "AC", "Acre", "AL", "Alagoas", … , "TO", "Tocantins", BLANK () )
+RETURN IF ( ISBLANK ( nombre ), BLANK (), nombre & ", Brasil" )
+```
+**Qué hace:** convierte la sigla del estado (SP, RJ…) en «São Paulo, Brasil», «Rio de Janeiro, Brasil», etc.
+**Por qué:** para Azure Maps una sigla de 2 letras es ambigua (puede ser un estado o provincia de otro país) y la ubica mal. Con el nombre completo y el país, cada burbuja cae en su estado. Es columna (no medida) porque se usa como **ubicación** del mapa, igual que una categoría. El cliente con estado «NA» queda en blanco y no se dibuja.
+
+### Página Logística
+- **Tarjetas:** `% entregas a tiempo` y `Días promedio de entrega`, color del valor con `Color LOG-01` / `Color LOG-02`; referencias con la meta y la variación vs mes anterior (color con `Color Var LOG-01` / `Color Var LOG-02`).
+- **Azure Maps:** ubicación `Estado (mapa)`, tamaño `Órdenes entregadas`, color de burbuja fx → `Color LOG-01`; información sobre herramientas con los dos KPIs.
+- **Líneas:** `% entregas a tiempo` por mes, 2017 vs 2018, con línea constante en `Meta LOG-01`. El segmentador de Año no filtra este visual, para que siempre compare los dos años.
+- **Barras:** `Días promedio de entrega` por región, color fx → `Color LOG-02`.
+- **Lectura (2018, ene–ago):** solo el Sudeste cumple la meta de ≤ 10 días (9.95); Norte (23.26) y Nordeste (19.05) son los más lentos. En 2018 el % a tiempo cae fuerte en febrero–marzo (≈ 81 %).
+
 ---
 
 ## Joseph — Medidas Clientes

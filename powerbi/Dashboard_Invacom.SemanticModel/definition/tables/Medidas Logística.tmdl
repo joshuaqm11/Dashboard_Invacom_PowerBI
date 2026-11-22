@@ -118,6 +118,10 @@ table 'Medidas Logística'
 		displayFolder: KPIs Logística
 		lineageTag: a19eaf8e-f3c7-49c3-85eb-d5296aad34ac
 
+	measure 'Título Logística' = "Logística · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+		displayFolder: KPIs Logística
+		lineageTag: ea38a809-8a77-402d-b037-51eb55e21dde
+
 	partition 'Medidas Logística' = m
 		mode: import
 		source =
