@@ -1,0 +1,25 @@
+{
+    "name": "Invacom",
+    "dataColors": ["#1F4E79", "#2E86C1", "#90A4AE", "#F9A825",
+                   "#2E7D32", "#C62828", "#6C3483", "#117A65"],
+    "background": "#FFFFFF",
+    "foreground": "#1B2631",
+    "tableAccent": "#1F4E79",
+    "good": "#2E7D32", "neutral": "#F9A825", "bad": "#C62828",
+    "textClasses": {
+        "title":   { "fontFace": "Segoe UI Semibold", "fontSize": 13, "color": "#1F4E79" },
+        "header":  { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1F4E79" },
+        "label":   { "fontFace": "Segoe UI", "fontSize": 10, "color": "#37474F" },
+        "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#1B2631" }
+    },
+    "visualStyles": {
+        "*": { "*": {
+            "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+            "border":     [{ "show": true, "color": { "solid": { "color": "#E0E6EB" } }, "radius": 10 }],
+            "dropShadow": [{ "show": true, "color": { "solid": { "color": "#B0BEC5" } }, "position": "Outer" }]
+        } },
+        "page": { "*": {
+            "background": [{ "color": { "solid": { "color": "#F4F6F8" } }, "transparency": 0 }]
+        } }
+    }
+}
