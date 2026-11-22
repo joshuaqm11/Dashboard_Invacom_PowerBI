@@ -159,7 +159,7 @@
           "expanded": {
             "expr": {
               "Literal": {
-                "Value": "false"
+                "Value": "true"
               }
             }
           }
@@ -167,6 +167,9 @@
       }
     ]
   },
+  "publicCustomVisuals": [
+    "BulletChart1443347686880"
+  ],
   "resourcePackages": [
     {
       "name": "SharedResources",
