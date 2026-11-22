@@ -1,22 +1,132 @@
 table 'Medidas Logística'
 	lineageTag: 00bbe968-0387-4a0d-a9d9-570354d8c8e4
 
-	column Columna1
-		dataType: string
-		lineageTag: 7c397718-df99-4d71-bcc0-e096d2319d8a
-		summarizeBy: none
-		sourceColumn: Columna1
+	measure 'Órdenes entregadas' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    FILTER ( FACT_VENTAS, NOT ISBLANK ( FACT_VENTAS[ENTREGADO_A_TIEMPO] ) )
+			)
+		formatString: #,0
+		displayFolder: KPIs Logística
+		lineageTag: 21c4cf19-c0c5-48e1-b9a9-2a1ff339af7b
 
-		annotation SummarizationSetBy = Automatic
+	measure 'Órdenes a tiempo' =
+			CALCULATE (
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+			    FILTER ( FACT_VENTAS, FACT_VENTAS[ENTREGADO_A_TIEMPO] = 1 )
+			)
+		formatString: #,0
+		displayFolder: KPIs Logística
+		lineageTag: 69f7c553-fd66-4fe1-ab32-df20cb3f426f
+
+	/// KPI-LOG-01: órdenes entregadas a tiempo ÷ órdenes entregadas
+	measure '% entregas a tiempo' = DIVIDE ( [Órdenes a tiempo], [Órdenes entregadas] )
+		formatString: 0.00%
+		displayFolder: KPIs Logística
+		lineageTag: e927ae5d-54f8-4278-b70a-ff65929acf6a
+
+	/// KPI-LOG-02: promedio de días de entrega, una vez por orden
+	measure 'Días promedio de entrega' =
+			AVERAGEX (
+			    VALUES ( FACT_VENTAS[ORDER_ID] ),
+			    CALCULATE ( MAX ( FACT_VENTAS[DIAS_ENTREGA] ) )
+			)
+		formatString: 0.00
+		displayFolder: KPIs Logística
+		lineageTag: a1371cb3-c458-40cd-90f7-1696ba9a613d
+
+	measure '% a tiempo mes anterior' = CALCULATE ( [% entregas a tiempo], PREVIOUSMONTH ( DIM_TIEMPO[FECHA] ) )
+		formatString: 0.00%
+		displayFolder: KPIs Logística
+		lineageTag: 86f7bb58-d20f-4fe8-a8f6-90045b55f2e2
+
+	measure 'Var LOG-01 vs mes anterior' = [% entregas a tiempo] - [% a tiempo mes anterior]
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: KPIs Logística
+		lineageTag: dbe535cb-c70b-49cd-82f7-0a2a34221396
+
+	measure 'Días mes anterior' = CALCULATE ( [Días promedio de entrega], PREVIOUSMONTH ( DIM_TIEMPO[FECHA] ) )
+		formatString: 0.00
+		displayFolder: KPIs Logística
+		lineageTag: 9cfc6964-bc61-413a-a348-9c7d00ac52a9
+
+	measure 'Var LOG-02 vs mes anterior' = [Días promedio de entrega] - [Días mes anterior]
+		formatString: +0.00;-0.00;0.00
+		displayFolder: KPIs Logística
+		lineageTag: 50a9bc69-6e1e-4691-bffb-38d7d57d9646
+
+	measure 'Órdenes entregadas en el mes' =
+			CALCULATE (
+			    [Órdenes entregadas],
+			    USERELATIONSHIP ( FACT_VENTAS[SK_FECHA_ENTREGA], DIM_TIEMPO[SK_TIEMPO] )
+			)
+		formatString: #,0
+		displayFolder: KPIs Logística
+		lineageTag: 8a09a1ae-7410-435d-b370-ac2f588121f2
+
+	measure 'Meta LOG-01' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+		formatString: 0.00%
+		displayFolder: KPIs Logística
+		lineageTag: fce6ec25-dbad-4cbf-90f1-9728deb6ef6a
+
+	measure 'Meta LOG-02' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+		formatString: 0.00
+		displayFolder: KPIs Logística
+		lineageTag: 7568755e-8f16-46a6-b8a0-528a6457b391
+
+	measure 'Color LOG-01' =
+			VAR valor = [% entregas a tiempo]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+			VAR rojo = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor >= verde, "#2E7D32",
+			        valor < rojo, "#C62828",
+			        "#F9A825"
+			    )
+		displayFolder: KPIs Logística
+		lineageTag: 45072daa-bc8a-4a1d-82d9-958d5352b169
+
+	measure 'Color LOG-02' =
+			VAR valor = [Días promedio de entrega]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+			VAR rojo = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor <= verde, "#2E7D32",
+			        valor > rojo, "#C62828",
+			        "#F9A825"
+			    )
+		displayFolder: KPIs Logística
+		lineageTag: fa7cbaeb-d27b-437d-a892-6ff1a924f227
+
+	measure 'Color Var LOG-01' =
+			VAR v = [Var LOG-01 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Logística
+		lineageTag: a10aedd1-1ae1-4f59-8a5f-bd8acdff7b31
+
+	measure 'Color Var LOG-02' =
+			VAR v = [Var LOG-02 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Logística
+		lineageTag: a19eaf8e-f3c7-49c3-85eb-d5296aad34ac
 
 	partition 'Medidas Logística' = m
 		mode: import
 		source =
 				let
 				    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Columna1 = _t]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Columna1"})
 				in
-				    #"Tipo cambiado"
+				    #"Columnas quitadas"
 
 	annotation PBI_ResultType = Table
 

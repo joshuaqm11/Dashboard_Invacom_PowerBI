@@ -35,6 +35,10 @@ La tabla `Metas KPI` (metas y límites del semáforo de los 8 KPIs) es una tabla
 | `TOTALYTD` | Cancelaciones acumuladas del año | Joseph |
 | `ISBLANK` | Órdenes con reseña, Color CLI-01, Color CLI-02 | Joseph |
 | `COUNTROWS` + `VALUES` | Total órdenes | Joseph |
+| `AVERAGEX` | Días promedio de entrega | Fabio |
+| `PREVIOUSMONTH` | % a tiempo mes anterior, Días mes anterior | Fabio |
+| `USERELATIONSHIP` | Órdenes entregadas en el mes | Fabio |
+| `MAX` | Días promedio de entrega | Fabio |
 | | | |
 
 ---
@@ -159,12 +163,101 @@ RETURN
 
 ## Fabio — Medidas Logística
 
-### [Nombre de la medida]
+Carpeta en el modelo: `Medidas Logística → KPIs Logística`.
+
+**Lo que hay que entender primero:** `FACT_VENTAS` tiene una fila por **ítem**, pero la entrega es un dato de la **orden**: una orden con 3 ítems repite su `ENTREGADO_A_TIEMPO` y sus `DIAS_ENTREGA` 3 veces. Por eso todo se cuenta y promedia **por orden** (`ORDER_ID`). Las órdenes no entregadas tienen esos campos vacíos y quedan fuera.
+
+Validación con 2017 (línea base aprobada): **% entregas a tiempo = 94.35 %** (40,973 de 43,426 órdenes entregadas) y **Días promedio de entrega = 12.54**. Ambas coinciden.
+Período meta (enero–agosto 2018): 92.27 % (amarillo, meta 95 %) y 11.69 días (amarillo, meta ≤ 10).
+
+### Órdenes entregadas / Órdenes a tiempo
 ```dax
--- código
+Órdenes entregadas =
+CALCULATE (
+    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+    FILTER ( FACT_VENTAS, NOT ISBLANK ( FACT_VENTAS[ENTREGADO_A_TIEMPO] ) )
+)
+
+Órdenes a tiempo =
+CALCULATE (
+    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] ),
+    FILTER ( FACT_VENTAS, FACT_VENTAS[ENTREGADO_A_TIEMPO] = 1 )
+)
 ```
-**Qué hace:**
-**Funciones usadas y por qué:**
+**Qué hace:** cuenta órdenes únicas con dato de entrega y órdenes únicas entregadas a tiempo.
+**Funciones usadas y por qué:** `FILTER` recorre fila por fila la tabla que ya está en el contexto (año, región…) y deja solo las filas que cumplen la condición; `CALCULATE` usa ese resultado como filtro. `DISTINCTCOUNT` cuenta órdenes, no filas: una orden de 3 ítems cuenta 1 vez. `ISBLANK` descarta las órdenes no entregadas.
+
+### KPI-LOG-01 · % entregas a tiempo
+```dax
+% entregas a tiempo = DIVIDE ( [Órdenes a tiempo], [Órdenes entregadas] )
+```
+**Qué hace:** órdenes a tiempo ÷ órdenes entregadas. Formato `0.00%`.
+**Funciones usadas y por qué:** `DIVIDE` devuelve vacío si el divisor es 0, en vez de error.
+
+### KPI-LOG-02 · Días promedio de entrega
+```dax
+Días promedio de entrega =
+AVERAGEX (
+    VALUES ( FACT_VENTAS[ORDER_ID] ),
+    CALCULATE ( MAX ( FACT_VENTAS[DIAS_ENTREGA] ) )
+)
+```
+**Qué hace:** promedia los días de entrega **una vez por orden**. Formato `0.00`.
+**Funciones usadas y por qué:** `VALUES` da la lista de órdenes únicas del contexto. `AVERAGEX` es un iterador: evalúa la expresión para cada orden y promedia los resultados, ignorando los vacíos (órdenes sin entregar). `CALCULATE ( MAX (…) )` convierte la orden actual en filtro (transición de contexto) y toma su valor de días; `MAX` sirve porque todas las filas de la orden tienen el mismo valor. Un `AVERAGE` simple promediaría ítems: una orden de 5 ítems pesaría 5 veces más.
+
+### Mes anterior y variación
+```dax
+% a tiempo mes anterior = CALCULATE ( [% entregas a tiempo], PREVIOUSMONTH ( DIM_TIEMPO[FECHA] ) )
+Var LOG-01 vs mes anterior = [% entregas a tiempo] - [% a tiempo mes anterior]
+
+Días mes anterior = CALCULATE ( [Días promedio de entrega], PREVIOUSMONTH ( DIM_TIEMPO[FECHA] ) )
+Var LOG-02 vs mes anterior = [Días promedio de entrega] - [Días mes anterior]
+```
+**Qué hace:** compara el KPI con el mes anterior (ej.: marzo 2018 = 81.04 %, −4.82 pts vs febrero; 15.87 días, −0.64 vs febrero).
+**Funciones usadas y por qué:** `PREVIOUSMONTH` devuelve todas las fechas del mes anterior al primer día del contexto; funciona porque `DIM_TIEMPO` está marcada como tabla de fechas. A diferencia de `DATEADD ( …, -1, MONTH )`, que **desplaza** todo el período un mes, `PREVIOUSMONTH` siempre devuelve **un mes completo**. Con un solo mes en el contexto dan lo mismo; con un rango, no. Por eso la variación se lee por mes (gráfico por mes o segmentador de mes).
+
+### Órdenes entregadas en el mes (por fecha de entrega)
+```dax
+Órdenes entregadas en el mes =
+CALCULATE (
+    [Órdenes entregadas],
+    USERELATIONSHIP ( FACT_VENTAS[SK_FECHA_ENTREGA], DIM_TIEMPO[SK_TIEMPO] )
+)
+```
+**Qué hace:** cuenta las órdenes según el mes en que se **entregaron**, no el mes en que se compraron.
+**Funciones usadas y por qué:** entre dos tablas solo puede haber una relación activa. La de fecha de compra es la activa porque los KPIs se miden por mes de compra; la de entrega está inactiva. `USERELATIONSHIP` la activa solo dentro de esta medida, sin cambiar las demás.
+
+### Metas y colores
+```dax
+Meta LOG-01 = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+Meta LOG-02 = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+
+Color LOG-01 =
+VAR valor = [% entregas a tiempo]
+VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+VAR rojo = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-LOG-01" )
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( valor ), BLANK (), valor >= verde, "#2E7D32", valor < rojo, "#C62828", "#F9A825" )
+
+Color LOG-02 =
+VAR valor = [Días promedio de entrega]
+VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+VAR rojo = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-LOG-02" )
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( valor ), BLANK (), valor <= verde, "#2E7D32", valor > rojo, "#C62828", "#F9A825" )
+
+Color Var LOG-01 =
+VAR v = [Var LOG-01 vs mes anterior]
+RETURN SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+
+Color Var LOG-02 =
+VAR v = [Var LOG-02 vs mes anterior]
+RETURN SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
+```
+**Qué hace:** lee meta y límites de `Metas KPI` y devuelve el color del semáforo para el formato condicional (fx → Valor del campo). LOG-01: mayor es mejor. LOG-02: menor es mejor (por eso `<=` y una variación negativa es verde).
+**Funciones usadas y por qué:** `LOOKUPVALUE` busca por código del KPI porque `Metas KPI` no tiene relaciones. `VAR / RETURN` guarda cada valor una sola vez. `SWITCH ( TRUE (), … )` evalúa las condiciones en orden, como un `if / else if`.
+
+**Por qué los dos KPIs son leading:** miden el proceso de entrega, que ocurre **antes** de los resultados: entregas tarde o lentas anticipan reseñas malas, cancelaciones y menos recompra (KPIs lagging). Se pueden corregir dentro del mes.
 
 ---
 
