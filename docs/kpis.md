@@ -36,8 +36,8 @@ Cada responsable filtra el año 2017 en Power BI y anota el valor que da su medi
 |---|---|---|---|---|
 | KPI-VEN-01 | 590,881 BRL | 590,881 BRL | Sí | `evidencias/validacion_kpis_ventas_2017.png` |
 | KPI-VEN-02 | 3,698 | 3,698 | Sí | `evidencias/validacion_kpis_ventas_2017.png` |
-| KPI-FIN-01 | 160.23 BRL | | | |
-| KPI-FIN-02 | 13.85 % | | | |
+| KPI-FIN-01 | 160.23 BRL | 160.23 BRL | Sí | `evidencias/validacion_kpis_finanzas_2017.png` |
+| KPI-FIN-02 | 13.85 % | 13.85 % | Sí | `evidencias/validacion_kpis_finanzas_2017.png` |
 | KPI-LOG-01 | 94.35 % | | | |
 | KPI-LOG-02 | 12.54 días | | | |
 | KPI-CLI-01 | 77.80 % | 77.80 % (34,390 / 44,205) | Sí | `evidencias/validacion_kpis_clientes_2017.png` |
