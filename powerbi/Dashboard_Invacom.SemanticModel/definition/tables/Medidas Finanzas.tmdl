@@ -1,22 +1,152 @@
 table 'Medidas Finanzas'
 	lineageTag: 07fe5e81-a7c2-427a-9c08-f0b5365712c3
 
-	column Columna1
-		dataType: string
-		lineageTag: 521025e1-c7d2-4365-bc7c-c541749b4dff
-		summarizeBy: none
-		sourceColumn: Columna1
+	measure 'Ticket promedio' =
+			
+			DIVIDE (
+			    SUM ( FACT_VENTAS[MONTO_TOTAL] ),
+			    DISTINCTCOUNT ( FACT_VENTAS[ORDER_ID] )
+			)
+		formatString: #,0.00 "BRL"
+		lineageTag: 4f1d2791-91b8-4092-83a1-732e1dc35a72
 
-		annotation SummarizationSetBy = Automatic
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Peso del flete' =
+			
+			VAR flete =
+			    CALCULATE (
+			        SUM ( FACT_VENTAS[FLETE] ),
+			        NOT DIM_ESTADO_ORDEN[ESTADO_ORDEN_ES] IN { "Cancelada", "No disponible" }
+			    )
+			VAR venta = [Ventas válidas]
+			RETURN
+			    DIVIDE ( flete, venta )
+		formatString: 0.00 %
+		lineageTag: 458e25ae-d1c0-45c9-bdfe-8ef8a142457a
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Ticket año anterior' =
+			
+			CALCULATE ( [Ticket promedio], SAMEPERIODLASTYEAR ( DIM_TIEMPO[FECHA] ) )
+		formatString: #,0.00 "BRL"
+		lineageTag: 29bda595-5387-4ec7-b4c2-ad34b693ee0c
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Var FIN-01 vs año anterior' =
+			
+			VAR actual   = [Ticket promedio]
+			VAR anterior = [Ticket año anterior]
+			RETURN
+			    DIVIDE ( actual - anterior, anterior )
+		formatString: +0.00%;-0.00%;0.00%
+		lineageTag: 53138dd2-9173-4880-8d2f-fe1ad52403cc
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Flete año anterior' =
+			
+			CALCULATE ( [Peso del flete], SAMEPERIODLASTYEAR ( DIM_TIEMPO[FECHA] ) )
+		formatString: 0.00 %
+		lineageTag: a8825afd-6563-4ec8-90ee-45bb667a5257
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Var FIN-02 vs año anterior' =
+			
+			[Peso del flete] - [Flete año anterior]
+		formatString: +0.00%;-0.00%;0.00%
+		lineageTag: c78ea442-0cc9-4970-aa40-f638230a1db5
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Var FIN-01 vs mes anterior' =
+			
+			VAR actual   = [Ticket promedio]
+			VAR anterior = CALCULATE ( [Ticket promedio], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+			RETURN
+			    DIVIDE ( actual - anterior, anterior )
+		formatString: +0.00%;-0.00%;0.00%
+		lineageTag: bb81b6b8-27f8-407d-983e-10edaf27f1c6
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Var FIN-02 vs mes anterior' =
+			
+			[Peso del flete] - CALCULATE ( [Peso del flete], DATEADD ( DIM_TIEMPO[FECHA], -1, MONTH ) )
+		formatString: +0.00%;-0.00%;0.00%
+		lineageTag: f20450b7-a3ae-46a2-bdd5-a112b3fcb60f
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Meta FIN-01' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-FIN-01" )
+		formatString: #,0.00 "BRL"
+		lineageTag: 2b3cd2c6-7fe3-4282-b0e4-4ecba22eeae9
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Meta FIN-02' = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-FIN-02" )
+		formatString: 0.00 %
+		lineageTag: 5d172f78-5b76-4754-bc52-4131dabea8f6
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Color FIN-01' =
+			
+			VAR valor = [Ticket promedio]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-FIN-01" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-FIN-01" )
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor >= verde, "#2E7D32",
+			        valor <  rojo,  "#C62828",
+			        "#F9A825" )
+		lineageTag: 8e2725b5-8566-4f9b-a55e-c9075973ec1c
+
+	measure 'Color FIN-02' =
+			
+			VAR valor = [Peso del flete]
+			VAR verde = LOOKUPVALUE ( 'Metas KPI'[LimiteVerde], 'Metas KPI'[Codigo], "KPI-FIN-02" )
+			VAR rojo  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo],  'Metas KPI'[Codigo], "KPI-FIN-02" )
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( valor ), BLANK (),
+			        valor <= verde, "#2E7D32",
+			        valor >  rojo,  "#C62828",
+			        "#F9A825" )
+		lineageTag: 3e779b67-7625-4df7-9b79-464132f45238
+
+	measure 'Color Var FIN-01' =
+			
+			VAR v = [Var FIN-01 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+		lineageTag: ec57dae2-2d14-4c5a-9f21-978fa16e8fcf
+
+	measure 'Color Var FIN-02' =
+			
+			VAR v = [Var FIN-02 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v <= 0, "#2E7D32", "#C62828" )
+		lineageTag: 55d04c29-b42b-418f-bc51-cc03c9ed9463
+
+	measure 'Título Finanzas' =
+			
+			"Finanzas · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+		lineageTag: 1c952646-950d-4e9c-aa9c-39a69b78fa87
 
 	partition 'Medidas Finanzas' = m
 		mode: import
 		source =
 				let
 				    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Columna1 = _t]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Columna1", type text}}),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo cambiado",{"Columna1"})
 				in
-				    #"Tipo cambiado"
+				    #"Columnas quitadas"
 
 	annotation PBI_ResultType = Table
 
