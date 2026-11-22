@@ -76,6 +76,26 @@ table DIM_CLIENTE
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Nombre completo del estado + pais, para que Azure Maps ubique bien cada estado
+	column 'Estado (mapa)' =
+			VAR nombre =
+			    SWITCH (
+			        DIM_CLIENTE[ESTADO],
+			        "AC", "Acre", "AL", "Alagoas", "AP", "Amapá",
+			        "AM", "Amazonas", "BA", "Bahia", "CE", "Ceará",
+			        "DF", "Distrito Federal", "ES", "Espírito Santo", "GO", "Goiás",
+			        "MA", "Maranhão", "MT", "Mato Grosso", "MS", "Mato Grosso do Sul",
+			        "MG", "Minas Gerais", "PA", "Pará", "PB", "Paraíba",
+			        "PR", "Paraná", "PE", "Pernambuco", "PI", "Piauí",
+			        "RJ", "Rio de Janeiro", "RN", "Rio Grande do Norte", "RS", "Rio Grande do Sul",
+			        "RO", "Rondônia", "RR", "Roraima", "SC", "Santa Catarina",
+			        "SP", "São Paulo", "SE", "Sergipe", "TO", "Tocantins",
+			        BLANK ()
+			    )
+			RETURN
+			    IF ( ISBLANK ( nombre ), BLANK (), nombre & ", Brasil" )
+		summarizeBy: none
+
 	partition DIM_CLIENTE = m
 		mode: import
 		source =
