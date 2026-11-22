@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b24be70f2af6bdaf6eac",
+  "position": {
+    "x": 970,
+    "y": 560,
+    "z": 5003,
+    "height": 500,
+    "width": 930,
+    "tabOrder": 5003
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_CLIENTE"
+                    }
+                  },
+                  "Property": "ESTADO"
+                }
+              },
+              "queryRef": "DIM_CLIENTE.ESTADO",
+              "nativeQueryRef": "ESTADO",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Finanzas"
+                    }
+                  },
+                  "Property": "Peso del flete"
+                }
+              },
+              "queryRef": "Medidas Finanzas.Peso del flete",
+              "nativeQueryRef": "Peso del flete"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas Finanzas"
+                  }
+                },
+                "Property": "Peso del flete"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Finanzas"
+                        }
+                      },
+                      "Property": "Color FIN-02"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Peso del flete por estado (semáforo vs meta 13 %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "2a7ac20a87e1d5a934ea",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_CLIENTE"
+              }
+            },
+            "Property": "ESTADO"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1f0788797bd0b2d1020d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Finanzas"
+              }
+            },
+            "Property": "Peso del flete"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

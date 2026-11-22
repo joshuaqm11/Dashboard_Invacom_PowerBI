@@ -1,0 +1,136 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "4313a6f92be75c36ebeb",
+  "position": {
+    "x": 20,
+    "y": 560,
+    "z": 5002,
+    "height": 500,
+    "width": 930,
+    "tabOrder": 5002
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_TIEMPO"
+                    }
+                  },
+                  "Property": "NOMBRE_MES"
+                }
+              },
+              "queryRef": "DIM_TIEMPO.NOMBRE_MES",
+              "nativeQueryRef": "NOMBRE_MES",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_TIEMPO"
+                    }
+                  },
+                  "Property": "ANIO"
+                }
+              },
+              "queryRef": "DIM_TIEMPO.ANIO",
+              "nativeQueryRef": "ANIO"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Finanzas"
+                    }
+                  },
+                  "Property": "Ticket promedio"
+                }
+              },
+              "queryRef": "Medidas Finanzas.Ticket promedio",
+              "nativeQueryRef": "Ticket promedio"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ticket promedio por mes · 2017 vs 2018'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4aea0ee793e99635fc56",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_TIEMPO"
+              }
+            },
+            "Property": "NOMBRE_MES"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "db93bfbfc9f4c65dbc4c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Medidas Finanzas"
+              }
+            },
+            "Property": "Ticket promedio"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "5e2805e86f8d896d72fa",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DIM_TIEMPO"
+              }
+            },
+            "Property": "ANIO"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
