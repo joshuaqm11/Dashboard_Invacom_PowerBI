@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "log0navegador000000",
+  "position": {
+    "x": 20,
+    "y": 70,
+    "z": 2000,
+    "height": 50,
+    "width": 1880,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "pageNavigator",
+    "drillFilterOtherVisuals": true
+  },
+  "howCreated": "InsertVisualButton"
+}

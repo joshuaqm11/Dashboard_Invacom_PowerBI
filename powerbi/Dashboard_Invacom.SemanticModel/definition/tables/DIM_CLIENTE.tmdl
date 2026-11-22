@@ -94,6 +94,7 @@ table DIM_CLIENTE
 			    )
 			RETURN
 			    IF ( ISBLANK ( nombre ), BLANK (), nombre & ", Brasil" )
+		lineageTag: c646bbe4-85c4-43a3-8007-156a8df06bba
 		summarizeBy: none
 
 	partition DIM_CLIENTE = m
