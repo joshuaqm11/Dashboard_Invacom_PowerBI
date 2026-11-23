@@ -26,9 +26,10 @@ La tabla `Metas KPI` (metas y límites del semáforo de los 8 KPIs) es una tabla
 | `VALUES` | Meses con ventas | Joshua |
 | `DIVIDE` | Ventas promedio mensuales, Órdenes promedio mensuales, Var VEN-01, Var VEN-02 | Joshua |
 | `DATEADD` | Ventas mes anterior, Órdenes mes anterior | Joshua |
-| `LOOKUPVALUE` | Meta VEN-01, Meta VEN-02, Color VEN-01, Color VEN-02 | Joshua |
-| `VAR` / `RETURN` | Color VEN-01, Color VEN-02 | Joshua |
-| `SWITCH` | Color VEN-01, Color VEN-02 | Joshua |
+| `LOOKUPVALUE` | Meta VEN-01, Meta VEN-02, Color VEN-01, Color VEN-02, Limite rojo VEN-01 | Joshua |
+| `VAR` / `RETURN` | Color VEN-01, Color VEN-02, Color Var VEN-01, Color Var VEN-02 | Joshua |
+| `SWITCH` | Color VEN-01, Color VEN-02, Color Var VEN-01, Color Var VEN-02 | Joshua |
+| `SELECTEDVALUE` | Título Ventas | Joshua |
 | `DATATABLE` | Tabla `Metas KPI` | Joshua |
 | `KEEPFILTERS` | Órdenes con reseña, Reseñas 4 y 5, Reseñas negativas | Joseph |
 | `REMOVEFILTERS` | % del total de reseñas negativas | Joseph |
@@ -152,6 +153,44 @@ RETURN
 
 **Qué hace:** devuelve el color del semáforo: verde si cumple la meta, rojo si está debajo del límite rojo y amarillo en medio. Se usa en el formato condicional de los visuales (**fx → Valor del campo**).
 **Funciones usadas y por qué:** `VAR` guarda el valor del KPI y los dos límites con un nombre, para no calcularlos varias veces y que se lea fácil; `RETURN` devuelve el resultado. `SWITCH(TRUE(), ...)` revisa las condiciones en orden y devuelve la primera que se cumple. `ISBLANK` evita pintar un color cuando no hay datos.
+
+### Color Var VEN-01 y Color Var VEN-02 (semáforo de la variación)
+```dax
+Color Var VEN-01 =
+VAR v = [Var VEN-01 vs mes anterior]
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+```
+(`Color Var VEN-02` es igual, con `[Var VEN-02 vs mes anterior]`.)
+
+**Qué hace:** pinta la variación contra el mes anterior de cada tarjeta: verde si el KPI subió o se mantuvo, rojo si bajó. En los dos KPIs de ventas *mayor es mejor*, por eso la condición es `v >= 0`.
+**Funciones usadas y por qué:** `VAR` guarda la variación; `SWITCH(TRUE(), ...)` devuelve el primer color cuya condición se cumple; `ISBLANK` evita color cuando no hay mes anterior. Se usa en la tarjeta: **Etiquetas de referencia → Valor → Color → fx → Valor del campo**.
+
+### Título Ventas (título dinámico)
+```dax
+Título Ventas = "Ventas · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+```
+**Qué hace:** título de la página que cambia con el filtro de mes.
+**Funciones usadas y por qué:** `SELECTEDVALUE` devuelve el mes si hay uno solo seleccionado; si hay varios, devuelve el texto alternativo. `&` concatena el texto.
+
+### Medidas del velocímetro (Tachometer de AppSource)
+```dax
+Gauge inicio VEN-01 = 0
+Gauge fin VEN-01    = [Meta VEN-01] * 1.5
+Limite rojo VEN-01  = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-VEN-01" )
+```
+**Qué hace:** arman la escala del velocímetro de la página Ventas: de 0 a 1.5 veces la meta (1,500,000 BRL). La zona roja va de 0 al límite rojo (800,000), la amarilla del límite rojo a la meta (1,000,000) y la verde de la meta hacia arriba. La aguja es `Ventas promedio mensuales` y la marca de objetivo es `Meta VEN-01`.
+**Funciones usadas y por qué:** `LOOKUPVALUE` lee el límite de la tabla `Metas KPI`, igual que el semáforo, para que el velocímetro y las tarjetas usen exactamente los mismos rangos aprobados.
+
+### Página Ventas: qué muestra
+- **Título dinámico**, **navegador de páginas** y segmentadores de **Año** y **Mes** sincronizados con las demás páginas.
+- **Tarjetas KPI-VEN-01 y KPI-VEN-02**: valor con color del semáforo, meta y variación contra el mes anterior (verde/rojo).
+- **Velocímetro (Tachometer, visual de AppSource)**: ventas promedio mensuales contra la meta, con zonas rojo/amarillo/verde.
+- **Línea mensual 2017 vs 2018** con la línea de la meta (1,000,000 BRL). No la afecta el filtro de año, para comparar siempre los dos años.
+- **Top 10 categorías que más venden** (filtro Top N por `Ventas válidas`) y **ventas por región**: gráficos de contexto.
+
+Validación (año 2017): 590,881 BRL y 3,698 órdenes, iguales a la línea base. Captura: `docs/evidencias/validacion_kpis_ventas_2017.png`. Página completa (2018): `docs/evidencias/pagina_ventas.png`.
+
 
 ---
 

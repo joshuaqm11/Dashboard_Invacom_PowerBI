@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "daacf488ce0b7a7485a6",
   "position": {
-    "x": 10.857965702317058,
-    "y": 0,
-    "z": 0,
-    "height": 363.74185102762141,
-    "width": 948.26233800235639,
-    "tabOrder": 0
+    "x": 20,
+    "y": 140,
+    "z": 4000,
+    "height": 400,
+    "width": 600,
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -28,44 +28,119 @@
               },
               "queryRef": "Medidas Ventas.Ventas promedio mensuales",
               "nativeQueryRef": "Ventas promedio mensuales"
-            },
-            {
-              "field": {
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "referenceLabel": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
                       "Entity": "Medidas Ventas"
                     }
                   },
-                  "Property": "Órdenes promedio mensuales"
+                  "Property": "Meta VEN-01"
                 }
-              },
-              "queryRef": "Medidas Ventas.Órdenes promedio mensuales",
-              "nativeQueryRef": "Órdenes promedio mensuales"
-            }
-          ]
-        }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "Medidas Ventas"
-                  }
-                },
-                "Property": "Ventas promedio mensuales"
               }
-            },
-            "direction": "Descending"
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 0
+                }
+              }
+            ],
+            "metadata": "Medidas Ventas.Ventas promedio mensuales",
+            "id": "field-22fa1015-e953-4514-81de-65f2a39f4f85",
+            "order": 0
           }
-        ],
-        "isDefaultSort": true
-      }
-    },
-    "objects": {
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Ventas"
+                    }
+                  },
+                  "Property": "Var VEN-01 vs mes anterior"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 0
+                }
+              }
+            ],
+            "metadata": "Medidas Ventas.Ventas promedio mensuales",
+            "id": "field-b9cc7ae7-c631-4fff-9483-6c7e66e62dca",
+            "order": 1
+          }
+        }
+      ],
+      "referenceLabelValue": [
+        {
+          "properties": {
+            "valueFontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Ventas"
+                        }
+                      },
+                      "Property": "Color Var VEN-01"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 0
+                }
+              }
+            ],
+            "metadata": "Medidas Ventas.Ventas promedio mensuales",
+            "id": "field-b9cc7ae7-c631-4fff-9483-6c7e66e62dca"
+          }
+        }
+      ],
+      "cardCalloutArea": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ],
       "value": [
         {
           "properties": {
@@ -84,51 +159,21 @@
                   }
                 }
               }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "dataViewWildcard": {
-                  "matchingOption": 0
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "36D"
                 }
               }
-            ],
-            "metadata": "Medidas Ventas.Ventas promedio mensuales"
-          }
-        },
-        {
-          "properties": {
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Measure": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Medidas Ventas"
-                        }
-                      },
-                      "Property": "Color VEN-02"
-                    }
-                  }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "dataViewWildcard": {
-                  "matchingOption": 0
-                }
-              }
-            ],
-            "metadata": "Medidas Ventas.Órdenes promedio mensuales"
-          }
-        },
-        {
-          "properties": {
+            },
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
@@ -138,7 +183,7 @@
             }
           },
           "selector": {
-            "metadata": "Medidas Ventas.Órdenes promedio mensuales"
+            "id": "default"
           }
         },
         {

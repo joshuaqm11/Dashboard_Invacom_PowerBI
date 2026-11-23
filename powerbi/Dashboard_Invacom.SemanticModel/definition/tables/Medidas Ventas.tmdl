@@ -110,6 +110,45 @@ table 'Medidas Ventas'
 		displayFolder: KPIs Ventas
 		lineageTag: af5988ea-22b2-4eb5-b5e6-86633a473536
 
+	/// Color de la variación de KPI-VEN-01 contra el mes anterior: verde si sube, rojo si baja
+	measure 'Color Var VEN-01' =
+			VAR v = [Var VEN-01 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Ventas
+		lineageTag: 75869c44-d35c-4607-9ab7-c1b83776216f
+
+	/// Color de la variación de KPI-VEN-02 contra el mes anterior: verde si sube, rojo si baja
+	measure 'Color Var VEN-02' =
+			VAR v = [Var VEN-02 vs mes anterior]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= 0, "#2E7D32", "#C62828" )
+		displayFolder: KPIs Ventas
+		lineageTag: e12cba70-48f6-469d-a144-4ef53e74fae3
+
+	/// Título dinámico de la página Ventas
+	measure 'Título Ventas' = "Ventas · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+		displayFolder: KPIs Ventas
+		lineageTag: f0516b6c-0e01-445b-a71b-95ed8ae25c27
+
+	/// Inicio de la escala del velocímetro de ventas (0 BRL)
+	measure 'Gauge inicio VEN-01' = 0
+		formatString: #,0
+		displayFolder: KPIs Ventas
+		lineageTag: 62e87849-0254-4aeb-8e2c-396f4a342489
+
+	/// Fin de la escala del velocímetro de ventas: 1.5 veces la meta
+	measure 'Gauge fin VEN-01' = [Meta VEN-01] * 1.5
+		formatString: #,0
+		displayFolder: KPIs Ventas
+		lineageTag: 0bc65b3c-041f-47fb-9c01-7d3dcf9d3510
+
+	/// Límite rojo del semáforo de KPI-VEN-01 (debajo de este valor es rojo), leído de Metas KPI
+	measure 'Limite rojo VEN-01' = LOOKUPVALUE ( 'Metas KPI'[LimiteRojo], 'Metas KPI'[Codigo], "KPI-VEN-01" )
+		formatString: #,0
+		displayFolder: KPIs Ventas
+		lineageTag: 9e852772-6a7c-4ad7-ba16-f014474c21ca
+
 	column Columna1
 		dataType: string
 		isHidden
