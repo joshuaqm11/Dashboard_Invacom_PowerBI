@@ -3,11 +3,11 @@
   "name": "f2b0portada0matriz00",
   "position": {
     "x": 20,
-    "y": 580,
+    "y": 760,
     "z": 5,
     "width": 1880,
-    "height": 480,
-    "tabOrder": 5
+    "height": 300,
+    "tabOrder": 6
   },
   "visual": {
     "visualType": "pivotTable",
@@ -63,6 +63,66 @@
               "queryRef": "Medidas Ventas.Órdenes promedio mensuales",
               "nativeQueryRef": "VEN-02 Órdenes promedio mensuales",
               "displayName": "VEN-02 Órdenes promedio mensuales"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Finanzas"
+                    }
+                  },
+                  "Property": "Ticket promedio"
+                }
+              },
+              "queryRef": "Medidas Finanzas.Ticket promedio",
+              "nativeQueryRef": "FIN-01 Ticket promedio",
+              "displayName": "FIN-01 Ticket promedio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Finanzas"
+                    }
+                  },
+                  "Property": "Peso del flete"
+                }
+              },
+              "queryRef": "Medidas Finanzas.Peso del flete",
+              "nativeQueryRef": "FIN-02 Peso del flete",
+              "displayName": "FIN-02 Peso del flete"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Logística"
+                    }
+                  },
+                  "Property": "% entregas a tiempo"
+                }
+              },
+              "queryRef": "Medidas Logística.% entregas a tiempo",
+              "nativeQueryRef": "LOG-01 % entregas a tiempo",
+              "displayName": "LOG-01 % entregas a tiempo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas Logística"
+                    }
+                  },
+                  "Property": "Días promedio de entrega"
+                }
+              },
+              "queryRef": "Medidas Logística.Días promedio de entrega",
+              "nativeQueryRef": "LOG-02 Días promedio de entrega",
+              "displayName": "LOG-02 Días promedio de entrega"
             },
             {
               "field": {
@@ -198,6 +258,170 @@
               }
             ],
             "metadata": "Medidas Ventas.Órdenes promedio mensuales"
+          }
+        },
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Finanzas"
+                        }
+                      },
+                      "Property": "Color FIN-01"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "Medidas Finanzas.Ticket promedio"
+          }
+        },
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Finanzas"
+                        }
+                      },
+                      "Property": "Color FIN-02"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "Medidas Finanzas.Peso del flete"
+          }
+        },
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Logística"
+                        }
+                      },
+                      "Property": "Color LOG-01"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "Medidas Logística.% entregas a tiempo"
+          }
+        },
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Medidas Logística"
+                        }
+                      },
+                      "Property": "Color LOG-02"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "Medidas Logística.Días promedio de entrega"
           }
         },
         {
@@ -354,7 +578,7 @@
             "rowPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             }
