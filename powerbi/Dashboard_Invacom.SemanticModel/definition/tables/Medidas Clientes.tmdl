@@ -151,6 +151,11 @@ table 'Medidas Clientes'
 		displayFolder: KPIs Clientes
 		lineageTag: 8e53a64c-6904-4769-92a6-3eaf7fce3c06
 
+	/// Título dinámico de la página Clientes
+	measure 'Título Clientes' = "Clientes · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+		displayFolder: KPIs Clientes
+		lineageTag: d929a5e9-2252-4f86-9a91-f8e8d8ee13c6
+
 	column Columna1
 		dataType: string
 		isHidden

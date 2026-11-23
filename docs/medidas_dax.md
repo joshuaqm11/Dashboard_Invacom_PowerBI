@@ -543,6 +543,13 @@ Var CLI-02 vs mes anterior =
 **Qué hace:** la comparación mensual que pide el enunciado. Como los dos KPIs ya son porcentajes, se **restan** (diferencia en puntos) en vez de dividir.
 **Funciones usadas y por qué:** `DATEADD(..., -1, MONTH)` corre las fechas del filtro un mes atrás y `CALCULATE` recalcula el KPI con esas fechas. En CLI-01 una variación positiva es buena; en CLI-02 una negativa es buena (bajan las cancelaciones). Los colores `Color Var CLI-01` y `Color Var CLI-02` aplican esa regla en el formato condicional.
 
+### Título Clientes (título dinámico)
+```dax
+Título Clientes = "Clientes · " & SELECTEDVALUE ( DIM_TIEMPO[ANIO_MES], "período seleccionado" )
+```
+**Qué hace:** título de la página Clientes que cambia con el filtro de mes, igual que en las demás páginas. Se agregó junto con el navegador de páginas para que Clientes siga el mismo estándar visual.
+**Funciones usadas y por qué:** `SELECTEDVALUE` devuelve el mes si hay uno solo seleccionado; si hay varios, devuelve el texto alternativo.
+
 ### Meta CLI-01, Meta CLI-02, Color CLI-01 y Color CLI-02
 ```dax
 Meta CLI-01 = LOOKUPVALUE ( 'Metas KPI'[Meta], 'Metas KPI'[Codigo], "KPI-CLI-01" )

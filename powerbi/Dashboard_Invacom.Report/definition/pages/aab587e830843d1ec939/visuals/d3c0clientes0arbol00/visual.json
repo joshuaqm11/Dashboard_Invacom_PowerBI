@@ -3,10 +3,10 @@
   "name": "d3c0clientes0arbol00",
   "position": {
     "x": 960,
-    "y": 80,
+    "y": 140,
     "z": 2,
+    "height": 920,
     "width": 940,
-    "height": 980,
     "tabOrder": 2
   },
   "visual": {
@@ -104,7 +104,7 @@
             "effectiveBarsPerLevel": {
               "expr": {
                 "Literal": {
-                  "Value": "13L"
+                  "Value": "12L"
                 }
               }
             }
