@@ -16,6 +16,9 @@ Muestra los 8 KPIs gerenciales aprobados por el profesor (2 por integrante).
 | Joseph | KPI-CLI-01 % reseñas 4–5 · KPI-CLI-02 Tasa de cancelación | Clientes | Portada ejecutiva, árbol de descomposición |
 
 Detalle de cada KPI: `docs/kpis.md`. Medidas DAX explicadas: `docs/medidas_dax.md`.
+Participación del equipo: `docs/participacion.md`. Actas de sprint: `docs/sprints/`.
+
+**Kanban (Trello):** https://trello.com/b/1Hm2pCge/dashboard-invacom-proyecto-2-miner%C3%ADa-de-datos
 
 ## Estructura del repositorio
 
