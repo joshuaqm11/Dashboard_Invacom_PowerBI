@@ -159,7 +159,7 @@
           "expanded": {
             "expr": {
               "Literal": {
-                "Value": "true"
+                "Value": "false"
               }
             }
           }
@@ -168,7 +168,8 @@
     ]
   },
   "publicCustomVisuals": [
-    "BulletChart1443347686880"
+    "BulletChart1443347686880",
+    "Tachometer1474636471549"
   ],
   "resourcePackages": [
     {

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "da26e9602e7528e8ecde",
   "position": {
-    "x": 959.1203037046733,
-    "y": 16.286948553475586,
+    "x": 1500,
+    "y": 0,
     "z": 3,
-    "height": 148.39219793166646,
-    "width": 948.2623380023564,
+    "height": 60,
+    "width": 200,
     "tabOrder": 3
   },
   "visual": {
@@ -27,8 +27,9 @@
                 }
               },
               "queryRef": "DIM_TIEMPO.ANIO",
-              "nativeQueryRef": "ANIO",
-              "active": true
+              "nativeQueryRef": "Año",
+              "active": true,
+              "displayName": "Año"
             }
           ]
         }
@@ -41,7 +42,7 @@
             "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "'Basic'"
+                  "Value": "'Dropdown'"
                 }
               }
             }
@@ -51,13 +52,6 @@
       "general": [
         {
           "properties": {
-            "orientation": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            },
             "filter": {
               "filter": {
                 "Version": 2,

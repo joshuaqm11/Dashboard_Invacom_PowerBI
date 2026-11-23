@@ -1,2 +1,221 @@
 cultureInfo es-CR
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "dim_tiempo.nombre_mes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DIM_TIEMPO",
+			          "ConceptualProperty": "NOMBRE_MES"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_tiempo.anio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DIM_TIEMPO",
+			          "ConceptualProperty": "ANIO"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Año": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_ventas.ventas_promedio_mensuales": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Ventas",
+			          "ConceptualProperty": "Ventas promedio mensuales"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "VEN-01 Ventas promedio mensuales": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_ventas.órdenes_promedio_mensuales": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Ventas",
+			          "ConceptualProperty": "Órdenes promedio mensuales"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "VEN-02 Órdenes promedio mensuales": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_finanzas.ticket_promedio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Finanzas",
+			          "ConceptualProperty": "Ticket promedio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "FIN-01 Ticket promedio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_finanzas.peso_del_flete": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Finanzas",
+			          "ConceptualProperty": "Peso del flete"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "FIN-02 Peso del flete": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_logística.entregas_a_tiempo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Logística",
+			          "ConceptualProperty": "% entregas a tiempo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "LOG-01 % entregas a tiempo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_logística.días_promedio_de_entrega": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Logística",
+			          "ConceptualProperty": "Días promedio de entrega"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "LOG-02 Días promedio de entrega": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_clientes.reseñas_4_y_5": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Clientes",
+			          "ConceptualProperty": "% reseñas 4 y 5"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "CLI-01 % reseñas 4 y 5": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas_clientes.tasa_de_cancelación": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas Clientes",
+			          "ConceptualProperty": "Tasa de cancelación"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "CLI-02 Tasa de cancelación": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+
